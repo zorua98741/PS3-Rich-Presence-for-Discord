@@ -29,11 +29,13 @@ When running the program, the user will be prompted for how the program should g
 If manual option is chosen, user can enter PS3's IP address.
 If automatic option is chosen, program will get the PC's IP address and use this to attempt to find the PS3's.
 
+* NOTE: Due to the way webman works when running PS2 games, the program __will not__ update the RPC, it will instead "freeze" (not heavily tested)
+
 the "implementedImage.txt" file is not required, however without it any PS3 game that does not currently have art assets will display no image at all,
 please place this file in the same directory as the .py/.exe file you are running the program from
 
 ## Contact me
-if you have any PS3 games you wish to have cover art implemented into the program, please contact me via discord: "zorua98741#0023".
+if you have any PS3 games you wish to have cover art implemented into the program, or any other enquiries for that matter, please contact me via discord: "zorua98741#0023".
 Please message me the output next to "validate():" as that will be the name of the art asset added. 
 
 ## Remote Python packages required
