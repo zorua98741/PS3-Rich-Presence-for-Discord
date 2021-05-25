@@ -37,13 +37,13 @@ if you have any PS3 games you wish to have cover art implemented into the progra
 Please message me the output next to "validate():" as that will be the name of the art asset added. 
 
 ## Remote Python packages required
-*urllib3
-*BeautifulSoup4
-*PyPresence
-*requests
+* urllib3
+* BeautifulSoup4
+* PyPresence
+* requests
 
 ## TODO
-implement ability to change time between updates to RPC (currently set to 2 minutes)
-implement more PS3 game covers
-squish any bugs reported
-(eventually) implement GUI to replace CLI
+* implement ability to change time between updates to RPC (currently set to 2 minutes)
+* implement more PS3 game covers
+* squish bugs
+* (eventually) implement GUI to replace CLI
