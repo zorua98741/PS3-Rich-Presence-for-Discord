@@ -10,15 +10,15 @@ Discord Rich Presence application for PlayStation 3 written in Python.
 ## Examples
  No game 	| 	PS3 game 	|	PS2 game 	|	PS1 game 	|
  -----------|---------------|---------------|---------------|
- ![noGame](https://imgur.com/gdAaT1F) | ![ps3Game](https://imgur.com/ZD1BF70) | ![ps2Game](https://imgur.com/n7o0msJ) | ![ps1Game](https://imgur.com/CYlTcm6)
+ ![noGame](https://imgur.com/gdAaT1F.png) | ![ps3Game](https://imgur.com/ZD1BF70.png) | ![ps2Game](https://imgur.com/n7o0msJ.png) | ![ps1Game](https://imgur.com/CYlTcm6.png)
  
 ## Usage
 
-###Requirements
+### Requirements
 * PS3 with webmanMOD installed (program is written working with v1.47.35)
 * PS3 and PC on the same network/internet connection
 
-###Installation
+### Installation
 A compiled .exe file is provided for use on the windows platform. 
 Full discretion: This file is flagged as a virus on my computer, i do not know what causes the file to be flagged.
 
@@ -37,12 +37,12 @@ if you have any PS3 games you wish to have cover art implemented into the progra
 Please message me the output next to "validate():" as that will be the name of the art asset added. 
 
 ## Remote Python packages required
-urllib3
-BeautifulSoup4
-PyPresence
-requests
+*urllib3
+*BeautifulSoup4
+*PyPresence
+*requests
 
-##TODO
+## TODO
 implement ability to change time between updates to RPC (currently set to 2 minutes)
 implement more PS3 game covers
 squish any bugs reported
