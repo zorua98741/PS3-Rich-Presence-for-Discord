@@ -8,9 +8,15 @@ Discord Rich Presence application for PlayStation 3 written in Python.
 * Display name and a single cover for currently open PS2 and PS1 game
  
 ## Examples
+### Old layout
  No game 	| 	PS3 game 	|	PS2 game 	|	PS1 game 	|
  -----------|---------------|---------------|---------------|
  ![noGame](https://imgur.com/gdAaT1F.png) | ![ps3Game](https://imgur.com/ZD1BF70.png) | ![ps2Game](https://imgur.com/n7o0msJ.png) | ![ps1Game](https://imgur.com/CYlTcm6.png)
+
+### New layout
+ No game 	| 	PS3 game 	|	PS2 game 	|	PS1 game 	|
+ -----------|---------------|---------------|---------------|
+ ![noGame](https://i.imgur.com/lw1vMGz.png) | ![ps3Game](https://i.imgur.com/aQxcbQG.png) | ![ps2Game](https://i.imgur.com/Z5vYdog.png) | ![ps1Game](https://i.imgur.com/7qfsisz.png) |
  
 ## Usage
 
