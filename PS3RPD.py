@@ -286,7 +286,7 @@ def noImage():
 
 
 while True:
-      checkAddress()
+      # checkAddress()        # causes crash?
 
       # __________access page with information needed__________
       quote_page = 'http://' + ip + '/cpursx.ps3?/sman.ps3'
@@ -305,7 +305,7 @@ while True:
       except (InvalidID, InvalidPipe):
             print("Discord not found")
             findDiscord()
-      time.sleep(20)                     # minimum of 15, larger value hopefully will decrease chance of PS3 crashing
+      time.sleep(15)                     # minimum of 15, larger value hopefully will decrease chance of PS3 crashing
       print("\n")
 
 # NOTES
