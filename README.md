@@ -20,6 +20,9 @@ Discord Rich Presence application for PlayStation 3 written in Python.
  
 ## Usage
 
+### NOTE:
+The compiled .exe file still has a bug present that crashes the PS3 under unknown conditions, the .py file has the buggy code commented out.
+
 ### Requirements
 * PS3 with webmanMOD installed (program is written working with v1.47.35)
 * PS3 and PC on the same network/internet connection
