@@ -4,7 +4,11 @@
 # PyPresence
 # requests
 
-from urllib.request import urlopen                  # ?
+from urllib.request import urlopen                  # open page for BeautifulSoup
+from urllib.error import URLError
+
+import urllib.request                               # test fix for checkAddress() crash bug
+
 from bs4 import BeautifulSoup                       # wMAN page scraping
 
 from pypresence import Presence                     # discord rich presence handler
@@ -149,30 +153,6 @@ timer = time.time()
 
 gameType = ""
 
-
-def checkAddress():
-
-      print("GAMETYPEIS: ", gameType)
-      hangTime = 30
-      connected = "false"
-      while connected == "false":
-            try:
-                  requests.get('http://' + ip)
-            except ConnectionError:
-                  print("\nwMAN server not found, \nCheck connection status of PS3")
-                  print("checking again in", hangTime, " seconds\n" )
-                  if gameType != "mount.ps3/dev_hdd0/PS2ISO":
-                        RPC.clear()
-                  else:
-                        RPC.update(details=gameName, state="temperature unavailable (PS2 mode)", large_image="ps2")
-                  time.sleep(hangTime)
-            else:
-                  print("Website exists")
-                  connected = "true"
-
-
-# ____________________
-
 # __________get values for rich presence__________
 
 
@@ -286,11 +266,14 @@ def noImage():
 
 
 while True:
-      # checkAddress()        # causes crash?
 
       # __________access page with information needed__________
       quote_page = 'http://' + ip + '/cpursx.ps3?/sman.ps3'
-      page = urlopen(quote_page)
+      try:
+            page = urlopen(quote_page)
+      except URLError:
+            print("Something bad happened")
+            break
       soup = BeautifulSoup(page, 'html.parser')
       # ____________________
 
@@ -305,7 +288,7 @@ while True:
       except (InvalidID, InvalidPipe):
             print("Discord not found")
             findDiscord()
-      time.sleep(15)                     # minimum of 15, larger value hopefully will decrease chance of PS3 crashing
+      time.sleep(15)
       print("\n")
 
 # NOTES
