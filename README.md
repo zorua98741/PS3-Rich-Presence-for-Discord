@@ -20,9 +20,6 @@ Discord Rich Presence application for PlayStation 3 written in Python.
  
 ## Usage
 
-### NOTE:
-The compiled .exe file still has a bug present that crashes the PS3 under unknown conditions, the .py file has the buggy code commented out.
-
 ### Requirements
 * PS3 with webmanMOD installed (program is written working with v1.47.35)
 * PS3 and PC on the same network/internet connection
@@ -54,7 +51,6 @@ Please message me the output next to "validate():" as that will be the name of t
 * requests
 
 ## TODO
-* implement ability to change time between updates to RPC (currently set to 2 minutes)
+* implement ability to change time between updates to RPC (currently set to 35 seconds)
 * implement more PS3 game covers
-* squish bugs
-* (eventually) implement GUI to replace CLI
+* implement GUI to replace CLI
