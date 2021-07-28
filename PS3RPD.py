@@ -7,8 +7,6 @@
 from urllib.request import urlopen                  # open page for BeautifulSoup
 from urllib.error import URLError
 
-import urllib.request                               # test fix for checkAddress() crash bug
-
 from bs4 import BeautifulSoup                       # wMAN page scraping
 
 from pypresence import Presence                     # discord rich presence handler
@@ -41,15 +39,15 @@ print("Program can find IP address of wMAN server automatically, however this pr
 
 
 def getIP():
-    mode = input("\nPlease choose either Manual (M) or Automatic (A): ")
+      mode = input("\nPlease choose either Manual (m) or Automatic (a): ")
+      if mode == "A" or mode == "a" or mode == "Auto" or mode == "auto" or mode == "Automatic" or mode == "automatic":
 
-    if mode == "M" or mode == "m" or mode == "Manual" or mode == "manual":
-        mIP = input("Enter PS3's IP address: ")
-        manualIPTest(mIP)
-    else:
-        print("Automatic search begin (20 seconds per search)")
-        print(splitIP[0] + "." + splitIP[1] + "." + splitIP[2] + ".__ ")
-        findIP()
+            print("Automatic search begin (20 seconds per search)")
+            print(splitIP[0] + "." + splitIP[1] + "." + splitIP[2] + ".__ ")
+            findIP()
+      else:
+            mIP = input("Enter PS3's IP address: ")
+            manualIPTest(mIP)
 
 
 def findIP():                 # test of each number takes 21 seconds assuming no host found
@@ -265,18 +263,25 @@ def noImage():
             print("noImage(): !no external file found!")
 
 
-while True:
 
+def getPage():
+      hang_time = 35
+      global soup
       # __________access page with information needed__________
       quote_page = 'http://' + ip + '/cpursx.ps3?/sman.ps3'
       try:
             page = urlopen(quote_page)
       except URLError:
-            print("Something bad happened")
-            break
+            print("getPage(): webman server not found, waiting", hang_time, "seconds before retry")
+            time.sleep(hang_time)
+            getPage()
+      print("getPage(): webman server found, continuing")
       soup = BeautifulSoup(page, 'html.parser')
       # ____________________
 
+
+while True:
+      getPage()
       getThermals()
       getGameInfo()
       validate()
@@ -288,15 +293,13 @@ while True:
       except (InvalidID, InvalidPipe):
             print("Discord not found")
             findDiscord()
-      time.sleep(15)
+      time.sleep(35)
       print("\n")
 
 # NOTES
 # "manualIPTest()" and "isWebman()" could probably be merged
 # unable to test PSP games
 # If console is turned off while running PS2 game there is no way to detect this and RP stays active
-# program can get stuck if wMAN server goes down while checkAddress() is running
-# "checkAddress()" takes a while to return, slowing down the output of the program
 
 
 # if implementedImage.txt is not in the same directory as this executable, the program will display all games that have
