@@ -32,10 +32,10 @@ Full discretion: This file is flagged as a virus on my computer, i do not know w
 Alternatively the PS3RPD.py file can be put into your favourite python IDE and ran from there. (Note the required external dependencies listed at the bottom of this readme file)
 
 ### General instructions
-When running the program, the user will be prompted for how the program should get the PS3's ip address, either manually or automatically.
-If manual option is chosen, user can enter PS3's IP address.
-If automatic option is chosen, program will get the PC's IP address and use this to attempt to find the PS3's.
-Each IP address will be tested for 20 seconds, so if your PS3 has an IP address of 192.168.0.200, it will take approx 1.1 hours to find the PS3, for this reason it is recommended to manually enter the IP.
+When running the program, the user will be prompted for how the program should get the PS3's ip address, either manually or automatically. <br>
+If manual option is chosen, user can enter PS3's IP address. <br>
+If automatic option is chosen, program will get the PC's IP address and use this to attempt to find the PS3's. <br>
+Each IP address will be tested for 20 seconds, so if your PS3 has an IP address of 192.168.0.200, it will take approx 1.1 hours to find the PS3, for this reason it is recommended to manually enter the IP. <br>
 Once wemanMOD's webserver has been found, the IP address will be saved into an external file "wMAN ip address.txt" in the same directory as the script/executable.
 
 * NOTE: Due to the way webman works when running PS2 games, the program __will not__ update the RPC, it will instead "freeze" (This function has not been tested and will likely have bugs)
