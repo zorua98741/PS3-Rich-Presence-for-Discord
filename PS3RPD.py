@@ -4,150 +4,122 @@
 # PyPresence
 # requests
 
-from urllib.request import urlopen                  # open page for BeautifulSoup
-from urllib.error import URLError
+from urllib.request import urlopen                      #
+from urllib.error import URLError                       #
+from bs4 import BeautifulSoup                           # web scraper to get info from wMAN webserver
+from pypresence import Presence                         # set up RPC
+from pypresence.exceptions import InvalidPipe           # handle if Discord is not found to be open
+from pypresence.exceptions import InvalidID             # ?? handles some Discord exception
+import time                                             # used for "time elapsed" functionality
+import requests                                         # used to test ping a local IP address
+from requests.exceptions import ConnectionError         # handle if IP address does not host a webserver
+import socket                                           # used to get PC's IP address
+import re                                               # used for regular expressions, trimming scraped webpage info
 
-from bs4 import BeautifulSoup                       # wMAN page scraping
+# __________ __________
+tempSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+tempSock.connect(("8.8.8.8", 80))
+PCip = tempSock.getsockname()[0]                                   # machines local IP address
+tempSock.close()
 
-from pypresence import Presence                     # discord rich presence handler
-from pypresence.exceptions import InvalidPipe       # error handling
-from pypresence.exceptions import InvalidID         # error handling
+splitIP = PCip.split(".")
+octetFour = 1                                                # assume all home modems use ".1" as the default gateway
 
-import time                                         # time elapsed
 
-import requests                                     # used to handle error 404 with BeautifulSoup
-from requests.exceptions import ConnectionError
-
-import socket                                       # get PC's IP address to use as a base for PS3 IP
-
-import re                                           # regular expressions for getting CPU, RSX, and FAN values
-
-# __________wMAN server IP finder__________
-# 1. Get PC's IP address
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect(("8.8.8.8", 80))
-PCIp = s.getsockname()[0]                             # the PC's local IP address
-s.close()
-# print("PC's IP is: ", PCIp)                         #debugging
-
-# 2. Split variable to be octet editable
-splitIP = PCIp.split(".")
-octetFour = 2                                         # starting value of 2 since 1 should be users modem/router
-
-print("Program can find IP address of wMAN server automatically, however this process takes a while,\n"
-      "would you prefer to enter the IP address manually, or to continue with auto search?")
+def readIP():
+    try:
+        with open('wMAN ip address.txt') as file:
+            savedIP = file.read()
+            print("IP saved in file is: ", savedIP)
+            file.close()
+            isWebman(savedIP)
+    except FileNotFoundError:
+        getIP()
 
 
 def getIP():
-      mode = input("\nPlease choose either Manual (m) or Automatic (a): ")
-      if mode == "A" or mode == "a" or mode == "Auto" or mode == "auto" or mode == "Automatic" or mode == "automatic":
-
-            print("Automatic search begin (20 seconds per search)")
-            print(splitIP[0] + "." + splitIP[1] + "." + splitIP[2] + ".__ ")
-            findIP()
-      else:
-            mIP = input("Enter PS3's IP address: ")
-            manualIPTest(mIP)
-
-
-def findIP():                 # test of each number takes 21 seconds assuming no host found
-    global testIP
-    global octetFour
-    # 3. iterate until title of page is "<title>wMAN
-    octetFour = int(octetFour)
-    if octetFour <= 255:
-          try:
-                octetFour = str(octetFour)
-                testIP = splitIP[0] + "." + splitIP[1] + "." + splitIP[2] + "." + octetFour
-                response = requests.get("http://" + testIP)             # used for exception
-                isWebman()
-
-          except requests.ConnectionError as exception:                # only runs if nothing is assigned to that IP
-                print("(", octetFour, ")", end=" ")                    # DEBUGGING
-                octetFour = int(octetFour)
-                octetFour = octetFour + 1
-                octetFour = str(octetFour)
-                findIP()
+    print("Program can find address of wMAN server automatically, however this process take awhile,\n"
+          "would you prefer to enter the IP address manually, or start an automatic search?\n")
+    global mode
+    mode = input("Please enter either Manual (m) or Automatic (a): ")
+    options = {"A", "a", "Auto", "auto", "Automatic", "automatic"}
+    if mode in options:
+        print("Automatic search begins, please wait.")
+        print(splitIP[0]+"."+splitIP[1]+"."+splitIP[2]+".__")
+        findIP()
     else:
-          print("\nAutomatic IP process failed")
-          getIP()
+        Mip = input("Enter PS3's IP address: ")
+        isWebman(Mip)
 
 
-def isWebman():
-      global testIP
-      global octetFour
-      global ip
-      print("\nHost at IP: ", testIP, end="")  # DEBUGGING
-      found = "false"  # boolean to stop search after webman server address found
-
-      quote_page = "http://" + testIP
-      headers = {"User-Agent": "Mozilla/5.0"}                           # handles pages that report as error 404
-      response = requests.get(quote_page, headers=headers)
-      soup = BeautifulSoup(response.text, 'html.parser')
-
-      pageTitle = soup.find('title')
-      pageTitle = str(pageTitle)
-      pageTitle = pageTitle.split()
-      if pageTitle[0] == "<title>wMAN":
-            print(" (is wMAN)")
-            found = "true"
-            ip = testIP
-
-      if found == "false":
-            print(" (not wMAN)")
-            octetFour = int(octetFour)
-            octetFour = octetFour + 1
+def findIP():
+    global octetFour                    # could restructure so global variable isn't needed?
+    octetFour += 1                      # if restructured, findIP() would be called with octectFour+1
+    if int(octetFour) < 255:
+        Aip = splitIP[0] + "." + splitIP[1] + "." + splitIP[2] + "." + str(octetFour)
+        try:
+            requests.get("http://"+Aip)
+            isWebman(Aip)
+        except requests.ConnectionError:
+            print("(",octetFour,")",end="")
             findIP()
+    else:
+        print("Automatic search process failed")
+        getIP()
 
 
-def manualIPTest(mIP):
-      global ip
-      print("You entered: ", mIP)
-      try:
-            response = requests.get("http://" + mIP)              # if manually entered IP is an address
-            print("Host found")
-            quote_page = "http://" + mIP
-            headers = {"User-Agent": "Mozilla/5.0"}
-            response = requests.get(quote_page, headers=headers)
-            soup = BeautifulSoup(response.text, 'html.parser')
+def isWebman(ip):
+    global mode
+    try:
+        requests.get("http://" + ip)
+        print("\nHost found at: ", ip, end=" ")
+        quote_page = "http://" + ip
+        headers = {"User-Agent": "Mozilla/5.0"}
+        response = requests.get(quote_page, headers=headers)
+        soup = BeautifulSoup(response.text, 'html.parser')
 
-            pageTitle = soup.find('title')
-            pageTitle = str(pageTitle)
-            pageTitle = pageTitle.split()
-            if pageTitle[0] == "<title>wMAN":
-                  print("is wMAN")
-                  found = "true"
-                  ip = mIP
+        pageTitle = soup.find('title')
+        pageTitle = str(pageTitle)
+        pageTitle = pageTitle.split()
+        if pageTitle[0] == "<title>wMAN":
+            print("is wMAN")
+            saveIP(ip)
+        else:
+            print("not wMAN")
+            options = {"A", "a", "Auto", "auto", "Automatic", "automatic"}
+            if mode in options:
+                findIP()
             else:
-                  print("Not wMAN")
-                  getIP()
+                getIP()
+    except requests.ConnectionError:
+        print("No web server on: ", ip)
+        getIP()
 
-      except requests.ConnectionError as exception:               # if manually entered IP is not an address
-            print("Not wMAN")
-            getIP()
+
+def saveIP(ip):
+    global gIP
+    file = open("wMAN ip address.txt", "w+")
+    file.write(ip)
+    file.close()
+    gIP = ip
 
 
 def findDiscord():
-      try:
-            RPC.connect()                                         # connect() can only be ran once per session
-            print("findDiscord(): found")
-      except InvalidPipe:                                         # handles if discord is not running on PC
-            print("findDiscord(): !not found!")
-            time.sleep(10)
-            findDiscord()
+    try:
+        RPC.connect()  # connect() can only be ran once per session
+        print("findDiscord(): found")
+    except InvalidPipe:  # handles if discord is not running on PC
+        print("findDiscord(): !not found!")
+        time.sleep(10)
+        findDiscord()
 
 
-getIP()
-print("\nWebmanMOD server at: ", ip)
-# ____________________
-
-# __________start PyPresence__________
+readIP()
 client_id = "780389261870235650"
 RPC = Presence(client_id)
 findDiscord()
-# ____________________
 timer = time.time()
-# __________check wMAN server status__________
+
 
 gameType = ""
 
@@ -165,8 +137,9 @@ def getThermals():
 
       HTMLFan = soup.find('a', href="/cpursx.ps3?mode")
       HTMLFan = str(HTMLFan)
-      Fan = re.search('FAN(.+?)%', HTMLFan)
+      Fan = re.search(':  (.+?)%', HTMLFan)
       Fan = Fan.group(0)
+      Fan = "Fan Speed" + Fan
 
       CPURSXFan = CPUtemp + " | " + RSXtemp + " | " + Fan  # formats string for appearance in rich presence
       print("getThermals(): ", CPURSXFan)
@@ -268,15 +241,17 @@ def getPage():
       hang_time = 35
       global soup
       # __________access page with information needed__________
-      quote_page = 'http://' + ip + '/cpursx.ps3?/sman.ps3'
+      quote_page = 'http://' + gIP + '/cpursx.ps3?/sman.ps3'
       try:
             page = urlopen(quote_page)
+            print("getPage(): webman server found, continuing")
+            soup = BeautifulSoup(page, 'html.parser')
       except URLError:
             print("getPage(): webman server not found, waiting", hang_time, "seconds before retry")
+            RPC.clear()
             time.sleep(hang_time)
             getPage()
-      print("getPage(): webman server found, continuing")
-      soup = BeautifulSoup(page, 'html.parser')
+
       # ____________________
 
 
@@ -295,15 +270,3 @@ while True:
             findDiscord()
       time.sleep(35)
       print("\n")
-
-# NOTES
-# "manualIPTest()" and "isWebman()" could probably be merged
-# unable to test PSP games
-# If console is turned off while running PS2 game there is no way to detect this and RP stays active
-
-
-# if implementedImage.txt is not in the same directory as this executable, the program will display all games that have
-# images added, however if a game does not have an image, NO image is shown.
-
-# if implementedImage.txt is found, the program will display all games that have images added, as well as have an image
-# for games that do not have an image (PS3Discord logo with a "?" overlay)

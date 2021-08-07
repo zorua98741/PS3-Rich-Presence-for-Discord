@@ -22,20 +22,23 @@ Discord Rich Presence application for PlayStation 3 written in Python.
 
 ### Requirements
 * PS3 with webmanMOD installed (program is written working with v1.47.35)
+
 * PS3 and PC on the same network/internet connection
 
 ### Installation
 A compiled .exe file is provided for use on the windows platform. 
 Full discretion: This file is flagged as a virus on my computer, i do not know what causes the file to be flagged.
 
-Alternatively the PS3RPD.py file can be put into your favourite python IDE and ran from there. (Note the required dependencies listed at the bottom of this readme file)
+Alternatively the PS3RPD.py file can be put into your favourite python IDE and ran from there. (Note the required external dependencies listed at the bottom of this readme file)
 
 ### General instructions
 When running the program, the user will be prompted for how the program should get the PS3's ip address, either manually or automatically.
 If manual option is chosen, user can enter PS3's IP address.
 If automatic option is chosen, program will get the PC's IP address and use this to attempt to find the PS3's.
+Each IP address will be tested for 20 seconds, so if your PS3 has an IP address of 192.168.0.200, it will take approx 1.1 hours to find the PS3, for this reason it is recommended to manually enter the IP.
+Once wemanMOD's webserver has been found, the IP address will be saved into an external file "wMAN ip address.txt" in the same directory as the script/executable.
 
-* NOTE: Due to the way webman works when running PS2 games, the program __will not__ update the RPC, it will instead "freeze" (not heavily tested)
+* NOTE: Due to the way webman works when running PS2 games, the program __will not__ update the RPC, it will instead "freeze" (This function has not been tested and will likely have bugs)
 
 the "implementedImage.txt" file is not required, however without it any PS3 game that does not currently have art assets will display no image at all,
 please place this file in the same directory as the .py/.exe file you are running the program from
