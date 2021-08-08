@@ -8,11 +8,11 @@ Discord Rich Presence application for PlayStation 3 written in Python.
 * Display name and a single cover for currently open PS2 and PS1 game
  
 ## Examples
-### Old layout
+<!-- ### Old layout
  No game 	| 	PS3 game 	|	PS2 game 	|	PS1 game 	|
  -----------|---------------|---------------|---------------|
  ![noGame](https://imgur.com/gdAaT1F.png) | ![ps3Game](https://imgur.com/ZD1BF70.png) | ![ps2Game](https://imgur.com/n7o0msJ.png) | ![ps1Game](https://imgur.com/CYlTcm6.png)
-
+-->
 ### New layout
  No game 	| 	PS3 game 	|	PS2 game 	|	PS1 game 	|
  -----------|---------------|---------------|---------------|
@@ -32,16 +32,18 @@ Full discretion: This file is flagged as a virus on my computer, i do not know w
 Alternatively the PS3RPD.py file can be put into your favourite python IDE and ran from there. (Note the required external dependencies listed at the bottom of this readme file)
 
 ### General instructions
-When running the program, the user will be prompted for how the program should get the PS3's ip address, either manually or automatically. <br>
-If manual option is chosen, user can enter PS3's IP address. <br>
-If automatic option is chosen, program will get the PC's IP address and use this to attempt to find the PS3's. <br>
-Each IP address will be tested for 20 seconds, so if your PS3 has an IP address of 192.168.0.200, it will take approx 1.1 hours to find the PS3, for this reason it is recommended to manually enter the IP. <br>
-Once wemanMOD's webserver has been found, the IP address will be saved into an external file "wMAN ip address.txt" in the same directory as the script/executable.
+On program start, user will be prompted for how the program should get the PS3's ip address <br><br>
+If manual is chosen, user can enter PS3's IP address. <br><br>
+If automatic is chosen, program will find the PS3's IP address. <br>
+Each IP address will be tested for 20 seconds, if your PS3 has an IP address of 192.168.0.200, it will take approx 1.1 hours to complete, due to this it is recommended to manually enter the IP. <br>
 
 * NOTE: Due to the way webman works when running PS2 games, the program __will not__ update the RPC, it will instead "freeze" (This function has not been tested and will likely have bugs)
 
 the "implementedImage.txt" file is not required, however without it any PS3 game that does not currently have art assets will display no image at all,
 please place this file in the same directory as the .py/.exe file you are running the program from
+ Without .txt file 	| With .txt file |
+ -------------------|----------------|
+ ![notxtfile] (https://imgur.com/xrkHBgC.png) | ![txtfile] (https://imgur.com/LQKekql.png) |
 
 ## Contact me
 if you have any PS3 games you wish to have cover art implemented into the program, or any other enquiries for that matter, please contact me via discord: "zorua98741#0023".
