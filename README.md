@@ -43,7 +43,7 @@ the "implementedImage.txt" file is not required, however without it any PS3 game
 please place this file in the same directory as the .py/.exe file you are running the program from
  Without .txt file 	| With .txt file |
  -------------------|----------------|
- ![notxtfile] (https://imgur.com/xrkHBgC.png) | ![txtfile] (https://imgur.com/LQKekql.png) |
+ ![notxtfile](https://imgur.com/xrkHBgC.png) | ![txtfile](https://imgur.com/LQKekql.png) |
 
 ## Contact me
 if you have any PS3 games you wish to have cover art implemented into the program, or any other enquiries for that matter, please contact me via discord: "zorua98741#0023".
