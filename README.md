@@ -41,7 +41,7 @@ Each IP address will be tested for 20 seconds, if your PS3 has an IP address of 
 
 the "implementedImage.txt" file is not required, however without it any PS3 game that does not currently have art assets will display no image at all,
 please place this file in the same directory as the .py/.exe file you are running the program from
-### example
+
  Without .txt file 	| With .txt file |
  -------------------|----------------|
  ![notxtfile](https://imgur.com/xrkHBgC.png) | ![txtfile](https://imgur.com/LQKekql.png)
