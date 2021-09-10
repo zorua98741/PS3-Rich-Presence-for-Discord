@@ -56,6 +56,10 @@ Please message me the output next to "validate():" as that will be the name of t
 * PyPresence
 * requests
 
+## Using your own images
+If you would like to have complete control over what images are used per game, you must create your own Discord developer application over at https://discord.com/developers/applications. <br>
+Once created, copy the "APPLICATION ID" from the developer portal and replace the variable "client_id" inside the python file. <br>
+You will now be able to add your own art assets in the developer portal under "Rich Presence > Art Assets". Note that there are naming conventions you will have to follow, and thus you will name the image the output of "validate():"
 ## TODO
 * implement ability to change time between updates to RPC (currently set to 35 seconds)
 * implement more PS3 game covers
