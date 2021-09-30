@@ -32,8 +32,8 @@ Full discretion: This file is flagged as a virus on my computer, i do not know w
 Alternatively the PS3RPD.py file can be put into your favourite python IDE and ran from there. (Note the required external dependencies listed at the bottom of this readme file)
 
 ### General instructions
-On program start, user will be prompted for how the program should get the PS3's ip address <br><br>
-If manual is chosen, user can enter PS3's IP address. <br><br>
+On program start, user will be prompted for how the program should get the PS3's ip address <br>
+If manual is chosen, user can enter PS3's IP address. <br>
 If automatic is chosen, program will find the PS3's IP address. <br>
 Each IP address will be tested for 20 seconds, if your PS3 has an IP address of 192.168.0.200, it will take approx 1.1 hours to complete, due to this it is recommended to manually enter the IP. <br>
 
@@ -58,8 +58,12 @@ Please message me the output next to "validate():" as that will be the name of t
 
 ## Using your own images
 If you would like to have complete control over what images are used per game, you must create your own Discord developer application over at https://discord.com/developers/applications. <br>
-Once created, copy the "APPLICATION ID" from the developer portal and replace the variable "client_id" inside the python file. <br>
-You will now be able to add your own art assets in the developer portal under "Rich Presence > Art Assets". Note that there are naming conventions you will have to follow, and thus you will name the image the output of "validate():"
+Once created, copy the "APPLICATION ID" from the developer portal and replace the value of the variable "client_id" inside the python file **there is currently no way to use your own images with the compiled .exe file**. <br>
+You will now be able to add your own art assets in the developer portal under "Rich Presence > Art Assets". Note that there are naming conventions you will have to follow, and thus you will name the image/art asset the output of "validate():"
+![validate() example](https://imgur.com/a/r5jNeFX)
+Note how the game's name is different to "validate()", and that to add an image for CSGO, the art asset in the Discord developer application would be named "counter_strike_global_offensive_".
+Finally, for the names of the art assets to be sent to *your* discord developer application, you have the option of either deleting "implementedImage.txt" or otherwise deleting all current text in the file, and adding your own names.
+
 ## TODO
 * implement ability to change time between updates to RPC (currently set to 35 seconds)
 * implement more PS3 game covers
