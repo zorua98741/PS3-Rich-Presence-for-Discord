@@ -47,8 +47,8 @@ please place this file in the same directory as the .py/.exe file you are runnin
  ![notxtfile](https://imgur.com/xrkHBgC.png) | ![txtfile](https://imgur.com/LQKekql.png)
 
 ## Contact me
-if you have any PS3 games you wish to have cover art implemented into the program, or any other enquiries for that matter, please contact me via discord: "zorua98741#0023".
-Please message me the output next to "validate():" as that will be the name of the art asset added. 
+please contact me via discord: "zorua98741#0023". <br>
+If you would like me to add game art to my developer application for your use, please message me the output of "validate():" for the game/s
 
 ## Remote Python packages required
 * urllib3
@@ -58,7 +58,7 @@ Please message me the output next to "validate():" as that will be the name of t
 
 ## Using your own images
 If you would like to have complete control over what images are used per game, you must create your own Discord developer application over at https://discord.com/developers/applications. <br>
-Once created, copy the "APPLICATION ID" from the developer portal and replace the value of the variable "client_id" inside the python file **there is currently no way to use your own images with the compiled .exe file**. <br>
+Once created, copy the "APPLICATION ID" from the developer portal and replace the value of the variable "client_id" inside the python file. **there is currently no way to use your own images with the compiled .exe file**. <br>
 You will now be able to add your own art assets in the developer portal under "Rich Presence > Art Assets". Note that there are naming conventions you will have to follow, and thus you will name the image/art asset the output of "validate():" <br>
  ![example](https://imgur.com/QUZ6GTq.png) <br>
 Note how the game's name is different to "validate()", and that to add an image for CSGO, the art asset in the Discord developer application would be named "counter_strike_global_offensive_".
@@ -66,5 +66,9 @@ Finally, for the names of the art assets to be sent to *your* discord developer 
 
 ## TODO
 * implement ability to change time between updates to RPC (currently set to 35 seconds)
-* implement more PS3 game covers
-* implement GUI to replace CLI
+* implement ability to disable temps & fan-speed display,
+* implement ability to change Discord Developer Application without changing variables (for .exe version),
+* find a way to remove need for implementedImage.txt?,
+* rewrite this README.md so its less of a word soup, and is easier to understand
+* rework PS2 presence detection to work more often
+* implement more PS3 game covers!!
