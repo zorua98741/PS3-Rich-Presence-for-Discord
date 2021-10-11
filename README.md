@@ -76,7 +76,7 @@ A: no, and i will be working on a way to remove it entirely.
 
 Q: Why are does [insert game here] not have an image when im playing it? <br>
 A: I am limited to adding only the games that i can play on my PS3 (that i own) because i cannot accurately guess what the name of the image will be, if you would like to use my Discord developer application, but with more images,
-*please* [message me on discord] (https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#contact-me), and i will be more than happy to add the game for you
+*please* [message me on discord](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#contact-me), and i will be more than happy to add the game for you
 
 ## TODO
 * implement ability to change time between updates to RPC (currently set to 35 seconds)
