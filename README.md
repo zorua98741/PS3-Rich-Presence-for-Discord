@@ -64,6 +64,16 @@ You will now be able to add your own art assets in the developer portal under "R
 Note how the game's name is different to "validate()", and that to add an image for CSGO, the art asset in the Discord developer application would be named "counter_strike_global_offensive_".
 Finally, for the names of the art assets to be sent to *your* discord developer application, you have the option of either deleting "implementedImage.txt" or otherwise deleting all current text in the file, and adding your own names.
 
+## (un)Frequently Asked Questions
+Q: Can this script be adapted for use on mobile devices?
+A: no. While the functionality of this script could easily be adapted into a mobile app, Discord does not widely support rich presence from its mobile app. If this changes please notify me and i'll (probably) start work on it.
+
+Q: Can this script be used without webmanMOD?
+A: no. The only other program i have encountered that i can scrape active game info from is CCAPI, which is lesser-used, and more complicated for the user to set-up than webmanMOD.
+
+Q: Do i need to use the implementedImage.txt?
+A: no, and i will be working on a way to remove it entirely.
+
 ## TODO
 * implement ability to change time between updates to RPC (currently set to 35 seconds)
 * implement ability to disable temps & fan-speed display,
