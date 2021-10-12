@@ -1,6 +1,7 @@
 # PS3-Rich-Presence-for-Discord
  
-Discord Rich Presence application for PlayStation 3 written in Python.
+Discord Rich Presence application for PlayStation 3 consoles on HFW&HEN/CFW written in Python.
+
 ## Features
 * Automatically find PS3 IP address (slow)
 * Display name and individual game cover of currently open PS3 game
@@ -21,9 +22,13 @@ Discord Rich Presence application for PlayStation 3 written in Python.
 ## Usage
 
 ### Requirements
-* PS3 with webmanMOD installed (program is written working with v1.47.35)
+* PS3 with either HFW&HEN or CFW installed
+
+* PS3 with webmanMOD installed (current working with v1.47.36)
 
 * PS3 and PC on the same network/internet connection
+
+* Discord installed and open on the PC running this script
 
 ### Installation
 A compiled .exe file is provided for use on the windows platform. 
