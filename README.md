@@ -35,7 +35,7 @@ Written in Python.
 A compiled .exe file is provided for use on the windows platform. 
 Full discretion: This file is flagged as a virus on my computer, i do not know what causes the file to be flagged.
 
-Alternatively the PS3RPD.py file can be put into your favourite python IDE and ran from there. (Note the required external dependencies listed at the bottom of this readme file)
+Alternatively the PS3RPD.py file can be put into your favourite python IDE and ran from there. (Note the required external dependencies listed [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#remote-python-packages-required))
 
 ### General instructions
 On program start, user will be prompted for how the program should get the PS3's ip address <br>
