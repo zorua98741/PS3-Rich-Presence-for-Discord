@@ -1,6 +1,7 @@
 # PS3-Rich-Presence-for-Discord
  
-Discord Rich Presence application for PlayStation 3 consoles on HFW&HEN/CFW written in Python.
+Discord Rich Presence application for PlayStation 3 consoles on HFW&HEN/CFW. 
+Written in Python.
 
 ## Features
 * Automatically find PS3 IP address (slow)
@@ -67,7 +68,7 @@ Once created, copy the "APPLICATION ID" from the developer portal and replace th
 You will now be able to add your own art assets in the developer portal under "Rich Presence > Art Assets". Note that there are naming conventions you will have to follow, and thus you will name the image/art asset the output of "validate():" <br>
  ![example](https://imgur.com/QUZ6GTq.png) <br>
 Note how the game's name is different to "validate()", and that to add an image for CSGO, the art asset in the Discord developer application would be named "counter_strike_global_offensive_".
-Finally, for the names of the art assets to be sent to *your* discord developer application, you have the option of either deleting "implementedImage.txt" or otherwise deleting all current text in the file, and adding your own names.
+Finally, for the names of the art assets to be sent to *your* discord developer application, you have the option of either deleting "implementedImage.txt" or otherwise deleting all current text in the file, and adding your own game names.
 
 ## (in)Frequently Asked Questions
 Q: Can this script be adapted for use on mobile devices? <br>
