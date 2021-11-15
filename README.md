@@ -95,13 +95,13 @@ before | after |
 ![noasset](https://i.imgur.com/8mJvYDH.png) | ![addedasset](https://i.imgur.com/XLIsIVV.png) |
 
 ### (in)Frequently asked questions
-Q: Can this script be adapted for use on mobile devices?<br>
+Q: Can this script be adapted for use on mobile devices?  
 A: no. While the functionality of this script could certainly be adapted into a mobile app. Discord does not support rich presence from its mobile app.
 
-Q: Can this script be used on OFW/without webmanMOD?
+Q: Can this script be used on OFW/without webmanMOD?  
 A: no. The only other program i have encountered that i can scrape game info from is CCAPI, which is lesser-used, and more complicated for the user to setup than webmanMOD.
 
-Q: Why does [insert game name here] not have an image when i play it?
+Q: Why does [insert game name here] not have an image when i play it?  
 A: either you have not waited long enough for your art asset to be uploaded into your own developer application, or, you are using my developer application,
 where i am limited to adding only the games i can play on my PS3 (that i own), if you would like to use my developer application, but with more images, please [message me on discord](),
 and i will be more than happy to add the game/s for you.
