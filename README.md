@@ -28,7 +28,7 @@ Display what you are playing on your PS3 via Discord's game activity.
 A compiled executable (.exe) is provided for use on the windows platform. 
 WARNING: This file was flagged as a virus on my computer, i do not know what causes the file to be flagged as such.
 
-Alternatively, the PS3RPD.py file can be ran from your favourite python IDE. (not the external dependencies listed [here]())
+Alternatively, the PS3RPD.py file can be ran from your favourite python IDE. (not the external dependencies listed [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#remote-python-packages-required))
 this script was written with pyton 3.9, i cannot provide support for early versions
 
 ### General instructions
@@ -39,7 +39,7 @@ If the manual option is chosen, the user can enter the PS3's IP address.
 If the automatic option is chosen, the program will take the PC's local IP address, and attempt to connect to each address in range 2 - 254.
 Each attempt will take ~20 seconds, because of this if your PS3 has an IP address of 192.168.0.200, it will take approximately **1.1 hours** to complete.
 
-Once the script has connected to your PS3, it will generate an external config file, **"PS3RPDconfig.txt"** (more information [here]()). It will automatically begin sending the game data to your Discord profile.
+Once the script has connected to your PS3, it will generate an external config file, **"PS3RPDconfig.txt"** (more information [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#external-config-file)). It will automatically begin sending the game data to your Discord profile.
 
 ## Contact Me
 please contact me via Discord: "zorua98741#0023".
@@ -61,8 +61,9 @@ PS3RPD makes use of an external config file to persistently store a few variable
 * To show the PS3's temperature
 * To use a shared cover for PS2&PSX games
 You may change these values to suit your own tastes, an example is shown below:
- IP | ID | Refresh time(seconds) | Show temperatures | Individual PS2&PSX covers | Output |
- ---|----|-----------------------|-------------------|---------------------------|--------|
+
+IP | ID | Refresh time(seconds) | Show temperatures | Individual PS2&PSX covers | Output |
+---|----|-----------------------|-------------------|---------------------------|--------|
 192.168.0.13 | 780389261870235650 | 35 | True | False | ![defaults]() |
 192.168.20.5 | 123456789012345678 | 15 | False | True | ![noTemp,indivCover]() |
 
