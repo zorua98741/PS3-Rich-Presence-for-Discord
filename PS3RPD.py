@@ -4,269 +4,272 @@
 # PyPresence
 # requests
 
-from urllib.request import urlopen                      #
-from urllib.error import URLError                       #
-from bs4 import BeautifulSoup                           # web scraper to get info from wMAN webserver
-from pypresence import Presence                         # set up RPC
-from pypresence.exceptions import InvalidPipe           # handle if Discord is not found to be open
-from pypresence.exceptions import InvalidID             # ?? handles some Discord exception
-import time                                             # used for "time elapsed" functionality
-import requests                                         # used to test ping a local IP address
-from requests.exceptions import ConnectionError         # handle if IP address does not host a webserver
-import socket                                           # used to get PC's IP address
-import re                                               # used for regular expressions, trimming scraped webpage info
-
-# __________ __________
-tempSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-tempSock.connect(("8.8.8.8", 80))
-PCip = tempSock.getsockname()[0]                                   # machines local IP address
-tempSock.close()
-
-splitIP = PCip.split(".")
-octetFour = 1                                                # assume all home modems use ".1" as the default gateway
+import socket
+import requests
+from bs4 import BeautifulSoup
+from pypresence import Presence
+from pypresence import InvalidPipe
+import time
+from pypresence import InvalidID
+from urllib.request import urlopen
+from urllib.error import URLError
+import re
 
 
-def readIP():
-    try:
-        with open('wMAN ip address.txt') as file:
-            savedIP = file.read()
-            print("IP saved in file is: ", savedIP)
-            file.close()
-            isWebman(savedIP)
-    except FileNotFoundError:
-        getIP()
+class PrepWork(object):
+    def __init__(self):
+        self.mode = "m"
+        self.octetFour = 0
+        self.splitIP = []
+        self.options = {"A", "a", "Auto", "auto", "Automatic", "automatic"}
+        self.ip = None
+        self.client_id = "780389261870235650"   # default client_id is my own
+        self.sleep_time = "35"                  # default sleep time is 35 seconds
+        self.temperatureBoolean = "True"        # default to show temperature is True
+        self.separateCovers = "False"           # default to have separate PSX and PS2 covers is False
+        self.RPC = None
 
-
-def getIP():
-    print("Program can find address of wMAN server automatically, however this process take awhile,\n"
-          "would you prefer to enter the IP address manually, or start an automatic search?\n")
-    global mode
-    mode = input("Please enter either Manual (m) or Automatic (a): ")
-    options = {"A", "a", "Auto", "auto", "Automatic", "automatic"}
-    if mode in options:
-        print("Automatic search begins, please wait.")
-        print(splitIP[0]+"."+splitIP[1]+"."+splitIP[2]+".__")
-        findIP()
-    else:
-        Mip = input("Enter PS3's IP address: ")
-        isWebman(Mip)
-
-
-def findIP():
-    global octetFour                    # could restructure so global variable isn't needed?
-    octetFour += 1                      # if restructured, findIP() would be called with octectFour+1
-    if int(octetFour) < 255:
-        Aip = splitIP[0] + "." + splitIP[1] + "." + splitIP[2] + "." + str(octetFour)
+    def getParams(self):
         try:
-            requests.get("http://"+Aip)
-            isWebman(Aip)
-        except requests.ConnectionError:
-            print("(",octetFour,")",end="")
-            findIP()
-    else:
-        print("Automatic search process failed")
-        getIP()
+            file = open("PS3RPDconfig.txt", "r")
+            lines = file.readlines()
+            # print(lines)  # DEBUGGING
+            file.close()
+            try:
+                self.ip = lines[0]  # first line in file (the IP address)
+                self.ip = self.ip.split(": ")  # split so ip[0] = "IP: ", ip[1] = (whatever the PS3's ip is)
+                self.ip = self.ip[1]  # make ip the address, not "IP: "
 
+                self.client_id = lines[1]  # second line in file (the client id)
+                self.client_id = self.client_id.split(": ")  # split so client_id[0] = "ID: ", client_id[1] = (whatever id is)
+                self.client_id = self.client_id[1]  # make client_id the string of numbers, not "ID: "
+                self.client_id = self.client_id.rstrip("\n")    # I have no idea why this particular line has a \n
 
-def isWebman(ip):
-    global mode
-    try:
-        requests.get("http://" + ip)
-        print("\nHost found at: ", ip, end=" ")
-        quote_page = "http://" + ip
-        headers = {"User-Agent": "Mozilla/5.0"}
-        response = requests.get(quote_page, headers=headers)
-        soup = BeautifulSoup(response.text, 'html.parser')
+                self.sleep_time = lines[2]  # third line in file (the sleep time)
+                self.sleep_time = self.sleep_time.split(": ")  # split so [0] = "Refresh time: ", [1] = (whatever value is)
+                self.sleep_time = self.sleep_time[1]  # make sleep_time the number
+                self.sleep_time = int(self.sleep_time)
+                if self.sleep_time < 15:
+                    self.sleep_time = 15
 
-        pageTitle = soup.find('title')
-        pageTitle = str(pageTitle)
-        pageTitle = pageTitle.split()
-        if pageTitle[0] == "<title>wMAN":
-            print("is wMAN")
-            saveIP(ip)
+                self.temperatureBoolean = lines[3]  # fourth line in file (the boolean of whether to show temps or not)
+                self.temperatureBoolean = self.temperatureBoolean.split(": ")  # split so [0] = "Show temperatures: ", [1] = (value)
+                self.temperatureBoolean = self.temperatureBoolean[1]  # make temperatureBoolean the value
+                self.temperatureBoolean = self.temperatureBoolean.rstrip("\n")  # remove newline from text
+
+                self.separateCovers = lines[4]      # fifth line in file (boolean of whether to show a shared cover or not)
+                self.separateCovers = self.separateCovers.split(": ")    # split so [0] = "Individual PS2&PSX covers: ", [1] = (value)
+                self.separateCovers = self.separateCovers[1]
+
+                self.isWebman(self.ip)
+            except IndexError:
+                print("ERROR WITH CONFIG FILE, PLEASE DELETE IT")
+                exit(0)
+        except FileNotFoundError:
+            print("config file not found\n")
+            self.getIP()
+
+    def getIP(self):
+        print("This program can find the address of your PS3 automatically, however this process takes a while,\n"
+              "would you prefer to enter the IP address manually, or start an automatic search?\n")
+        self.mode = input("Please enter either manual (M) or Automatic (A): ")
+        if self.mode in self.options:
+            print("Automatic search begins, please wait.")
+            tempSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            tempSock.connect(("8.8.8.8", 80))
+            PCip = tempSock.getsockname()[0]
+            tempSock.close()
+            self.splitIP = PCip.split(".")
+            print(self.splitIP[0] + "." + self.splitIP[1] + "." + self.splitIP[2] + ".___")
+            self.findIP()
         else:
-            print("not wMAN")
-            options = {"A", "a", "Auto", "auto", "Automatic", "automatic"}
-            if mode in options:
-                findIP()
+            self.ip = input("Enter PS3's IP address: ")
+            self.isWebman(self.ip)
+
+    def findIP(self):
+        self.octetFour += 1
+        if self.octetFour < 254:
+            self.ip = self.splitIP[0] + "." + self.splitIP[1] + "." + self.splitIP[2] + "." + str(self.octetFour)
+            try:
+                requests.get("http://" + self.ip)
+                print("\nHost found at: ", self.ip, end=" ")
+                self.isWebman(self.ip)
+            except requests.ConnectionError:
+                print("(", self.octetFour, ")", end="")
+                self.findIP()
+        else:  # called if all requests in range fail to find wMAN server
+            print("Automatic search process failed")
+            self.getIP()
+
+    def isWebman(self, ip):  # is only called if a web server is on the address
+        try:  # request needed to ensure server doesn't error out
+            ip = ip.rstrip("\n")  # remove newline from text
+            # print(ip)                                     # DEBUGGING
+            requests.get("http://" + ip)
+            quote_page = "http://" + ip
+            headers = {"User-Agent": "Mozilla/5.0"}
+            response = requests.get(quote_page, headers=headers)  # handles 401, 404, etc, errors
+            soup = BeautifulSoup(response.text, "html.parser")
+
+            pageTitle = str(soup.find('title'))
+            pageTitle = pageTitle.split()
+            if pageTitle[0] == "<title>wMAN":  # probably really bad test, should be more general
+                print("is wMAN")
+                self.saveIP(ip)
             else:
-                getIP()
-    except requests.ConnectionError:
-        print("No web server on: ", ip)
-        getIP()
+                print("not wMAN")
+                if self.mode in self.options:
+                    self.findIP()
+                else:
+                    self.getIP()
+        except requests.ConnectionError:
+            print("Some error occurred on input address, did your PS3's IP address change?\n")
+            self.getIP()
+
+    def saveIP(self, ip):
+        file = open("PS3RPDconfig.txt", "w+")  # w+ creates the file if it is missing
+        file.write("IP: ")
+        file.write(ip)  # ip changes based on what program finds/is entered
+
+        file.write("\nID: ")
+        file.write(str(self.client_id))  # default client_id is my own
+
+        file.write("\nRefresh time(seconds): ")
+        file.write(str(self.sleep_time))  # default refresh time is 35 seconds, minimum 15
+
+        file.write("\nShow temperatures: ")
+        file.write(str(self.temperatureBoolean))  # default is true, anything else will be false
+
+        file.write("\nIndividual PS2&PSX covers: ")
+        file.write(str(self.separateCovers))
+        file.close()
+
+    def findDiscord(self):
+        self.RPC = Presence(self.client_id)
+        try:
+            self.RPC.connect()
+            print("findDiscord():   found")
+        except InvalidPipe:
+            print("findDiscord():   !not found!")
+            time.sleep(15)
+            self.findDiscord()
 
 
-def saveIP(ip):
-    global gIP
-    file = open("wMAN ip address.txt", "w+")
-    file.write(ip)
-    file.close()
-    gIP = ip
+class GatherDetails(object):
+    def __init__(self):
+        self.soup = None                # HTML of webmanMOD page
+        self.CPUandRSX = None           # Extracted temperatures
+        self.ps3Game = None             # Extracted ps3 game name
+        self.gameName = None            # Name of either mounted PSX/PS2 game, or name of open PS3 game
+        self.gameType = None            # string containing whether game is PSX, PS2, PS3, etc.
+        self.isPS3 = True               # boolean used to make PSX & PS2 games have only 1 cover
+        self.gameImage = None           # Name of validated gameName
+
+    def getPage(self):
+        ip = setup.ip.rstrip("\n")  # remove newline from text
+        quote_page = "http://" + ip + "/cpursx.ps3?/sman.ps3"
+        try:
+            page = urlopen(quote_page)
+            print("getPage():       webman server found, continuing")
+            self.soup = BeautifulSoup(page, "html.parser")
+        except URLError:
+            print("getPage():       webman server not found, waiting", setup.sleep_time, "seconds before retry")
+            if self.gameType != "mount.ps3/dev_hdd0/PS2ISO":            # handles webmanMOD going down when a PS2 game is open
+                setup.RPC.clear()
+            time.sleep(float(setup.sleep_time))
+            self.getPage()
+
+    def getThermals(self):          # gets temperature from webmanMOD
+        HTMLCPUandRSX = str(self.soup.find("a", href="/cpursx.ps3?up"))
+        CPUtemp = re.search('CPU(.+?)C', HTMLCPUandRSX).group(0)
+        RSXtemp = re.search('RSX(.+?)C', HTMLCPUandRSX).group(0)
+
+        self.CPUandRSX = CPUtemp + " | " + RSXtemp
+        print("getThermals():   ", self.CPUandRSX)
+
+    def getGameInfo(self):          # gets name of open/mounted game or homebrew from webmanMOD
+        # As Todd Howard said, "it just works"
+        # The following code will first check for if a PS3 game is mounted (ps3Game), which is displayed separately from other games in webmanMOD's HTML,
+        # If found, that means a homebrew/PS3 game must be open, display that as the presence
+        # If not found, move onto gameType, and check if a different type of game is mounted
+        # If one is, display it as the presence
+        # If one is not, assume the user is on the XMB and display that
+        ps3GameRegion = str(self.soup.find("a", href=True, text=True, target="_blank"))  # needed for next if statement
+        if ps3GameRegion != "None":                                                         # will only detect PS3 games
+            self.isPS3 = True
+            self.ps3Game = str(self.soup.find("a", href=True, text=True, target="_blank").find_next_sibling())
+            self.ps3Game = re.search('>(.+[\r\n]?)+<', self.ps3Game).group(1)
+            print("getGameInfo():   ", self.gameName)
+            self.gameName = self.ps3Game
+        else:                                           # If no PS3 game is open, assume user is on the XMB
+            self.gameName = "XMB"
+            print("getGameInfo():   ", self.gameName)
+
+            self.gameType = str(self.soup.find('a', href=re.compile('mount(.+?)+')))
+            self.gameType = re.search('mount.ps3/dev_hdd0/(?:GAMES|PS2ISO|PSXISO|PSPISO|PS3ISO)', self.gameType)  # honestly could probably remove "GAMES" and "PS3ISO", but it woks fine the way it is
+            if self.gameType is not None:
+                try:
+                    self.gameType = self.gameType.group(0)
+                except AttributeError:
+                    print("[Timing Error]")
+                    exit(1)             # this should never be reached in the release of the script, but is kept for my own sanity
+                # some game must be mounted if the code reaches here
+                if self.gameType != "mount.ps3/dev_hdd0/GAMES" and self.gameType != "mount.ps3/dev_hdd0/PS3ISO":  # ensure a PS3 game is not mounted
+                    self.isPS3 = False
+                    otherGame = str(self.soup.find("a", href=re.compile('mount(.+?)+')))
+                    otherGame = re.search('>(.+?)<', otherGame)         # name of game/file mounted
+                    if otherGame is not None:
+                        otherGame = otherGame.group(1)          # excludes ">" "<"
+                        self.gameName = otherGame               # set presence variable to game/file mounted
+                        print("getGameInfo():   ", self.gameName)
+
+    # The lists in this function are not final, and are only representative of what i have found in my games,
+    # Please contribute any additional banned characters you come across so i can make this script better
+    def validate(self):         # validates the game's name for Discord's art asset naming conventions (allows images to display)
+        self.gameImage = self.gameName
+
+        if self.isPS3 is False and setup.separateCovers == "False" or self.isPS3 is False and setup.separateCovers == "false":
+            if self.gameType == "mount.ps3/dev_hdd0/PSXISO":
+                self.gameImage = "psx"
+            elif self.gameType == "mount.ps3/dev_hdd0/PS2ISO":
+                self.gameImage = "ps2"
+            else:
+                self.gameImage = "xmb"
+
+        self.gameImage = self.gameImage.lower()
+        cleanUp = ["\n", "(USA)", ".bin", ".iso", ".pkg", "(EUR)", "(JAP)", "(usa)", "(eur)", "(jap)"]         # not prohibited, but not needed
+        prohibited = ["\n", ":", ";", "®", "™", "&amp", "&", "/", "'", ".", "★"]    # characters that can't be in the name
+        for i in range(len(cleanUp)):
+            self.gameImage = self.gameImage.replace(cleanUp[i], "")
+            self.gameName = self.gameName.replace(cleanUp[i], "")
+        for i in range(len(prohibited)):
+            self.gameImage = self.gameImage.replace(prohibited[i], "")
+        self.gameImage = self.gameImage.replace(" ", "_")                   # spaces " " are not allowed in image name
+        self.gameImage = self.gameImage[:32]                                # max 32 characters
+        self.gameImage = self.gameImage.replace("&amp;", "&")               # reformats ampersands
+
+        print("validate():      ", self.gameImage)
 
 
-def findDiscord():
-    try:
-        RPC.connect()  # connect() can only be ran once per session
-        print("findDiscord(): found")
-    except InvalidPipe:  # handles if discord is not running on PC
-        print("findDiscord(): !not found!")
-        time.sleep(10)
-        findDiscord()
+setup = PrepWork()
+setup.getParams()  # goes through all defined functions in PrepWork(), minus findDiscord()
+setup.findDiscord()
 
-
-readIP()
-client_id = "780389261870235650"
-RPC = Presence(client_id)
-findDiscord()
 timer = time.time()
 
-
-gameType = ""
-
-# __________get values for rich presence__________
-
-
-def getThermals():
-      global CPURSXFan
-      HTMLCPUandRSX = soup.find('a', href="/cpursx.ps3?up")
-      HTMLCPUandRSX = str(HTMLCPUandRSX)
-      CPUtemp = re.search('CPU(.+?)C', HTMLCPUandRSX)
-      CPUtemp = CPUtemp.group(0)
-      RSXtemp = re.search('RSX(.+?)C', HTMLCPUandRSX)
-      RSXtemp = RSXtemp.group(0)
-
-      HTMLFan = soup.find('a', href="/cpursx.ps3?mode")
-      HTMLFan = str(HTMLFan)
-      Fan = re.search(':  (.+?)%', HTMLFan)
-      Fan = Fan.group(0)
-      Fan = "Fan Speed" + Fan
-
-      CPURSXFan = CPUtemp + " | " + RSXtemp + " | " + Fan  # formats string for appearance in rich presence
-      print("getThermals(): ", CPURSXFan)
-      # ____________________
-
-
-def getGameInfo():
-      global gameName
-      global gameType
-      gameName = ""
-      otherGame = ""
-      ps3Game = ""
-      ps3GameRegion = soup.find('a', href=True, text=True, target="_blank")
-      ps3GameRegion = str(ps3GameRegion)
-
-      if ps3GameRegion != "None":
-            ps3Game = soup.find('a', href=True, text=True, target="_blank").find_next_sibling()
-            ps3Game = str(ps3Game)
-            ps3Game = ps3Game.replace("\n", " ")
-            ps3Game = re.search('>(.+[\r\n]?)+<', ps3Game)
-            ps3Game = ps3Game.group(1)
-            print("getGameInfo() - Game open: ", ps3Game)
-            gameName = ps3Game
-
-
-      gameType = soup.find('a', href=re.compile('mount(.+?)+'))
-      gameType = str(gameType)
-      gameType = re.search('mount.ps3/dev_hdd0/(?:GAMES|PS2ISO|PSXISO|PSPISO|PS3ISO)', gameType)
-      if gameType != "" and gameType != None:
-            gameType = gameType.group(0)
-            # print("GAMETYPE IS: ", gameType)
-
-      if ps3Game == None or ps3Game == "":
-            print("getGameInfo(): XMB")
-            gameName = "XMB"
-
-      if ps3Game == None or ps3Game == "":
-            gameType = str(gameType)                  # string for if statement
-            if gameType != "mount.ps3/dev_hdd0/GAMES" and gameType != "mount.ps3/dev_hdd0/PS3ISO":
-                  otherGame = soup.find('a', href=re.compile('mount(.+?)+'))
-                  otherGame = str(otherGame)
-                  otherGame = re.search('>(.+?)<', otherGame)
-                  if otherGame != None:
-                        otherGame = otherGame.group(1)
-                        print("getGameInfo() - Game mounted: ", otherGame)
-                        gameName = otherGame
-
-
-def validate():
-      global gameImage
-      global gameName
-      gameImage = "none"
-
-
-      cleanUp = ["\n", "(USA)", ".bin", ".iso", ".pkg", "(EUR)", "(JAP)"]
-      for i in range(7):
-            gameName = gameName.replace(cleanUp[i], "")
-      gameName = gameName.replace("&amp;", "&")
-
-
-      if gameName != "":
-            gameImage = gameName.lower()
-            prohibited = ["\n", ":", ";", "®", "™", "&amp", "&", "/", "'", ".", "★"]
-
-            for i in range(11):
-                  gameImage = gameImage.replace(prohibited[i], "")
-            gameImage = gameImage.replace(" ", "_")
-            gameImage = gameImage[:32]
-            print("validate(): ", gameImage)
-
-
-def noImage():
-      global gameImage
-      if gameImage != "_rebug_toolbox_":
-            if gameType == "mount.ps3/dev_hdd0/PS2ISO":
-                  gameImage = "ps2"
-            if gameType == "mount.ps3/dev_hdd0/PSXISO":
-                  gameImage = "psx"
-
-      try:
-            with open('implementedImage.txt') as file:
-                  line = file.readlines()
-                  totalItems = len(line)
-                  artPresent = "false"
-            file.close()
-            for i in range(totalItems):
-                  line[i] = line[i].replace("\n", "")
-                  if gameImage == line[i]:
-                        artPresent = "true"
-            if artPresent == "false":
-                  gameImage = "unknown_game"
-            print("noImage(): ", gameImage)
-      except FileNotFoundError:
-            print("noImage(): !no external file found!")
-
-
-
-def getPage():
-      hang_time = 35
-      global soup
-      # __________access page with information needed__________
-      quote_page = 'http://' + gIP + '/cpursx.ps3?/sman.ps3'
-      try:
-            page = urlopen(quote_page)
-            print("getPage(): webman server found, continuing")
-            soup = BeautifulSoup(page, 'html.parser')
-      except URLError:
-            print("getPage(): webman server not found, waiting", hang_time, "seconds before retry")
-            RPC.clear()
-            time.sleep(hang_time)
-            getPage()
-
-      # ____________________
-
-
+details = GatherDetails()
 while True:
-      getPage()
-      getThermals()
-      getGameInfo()
-      validate()
-      noImage()
+    details.getPage()
+    if setup.temperatureBoolean == "True" or setup.temperatureBoolean == "true":
+        details.getThermals()
+    details.getGameInfo()
+    details.validate()
+    try:
+        setup.RPC.update(details=details.gameName, state=details.CPUandRSX, large_image=details.gameImage, start=timer)
+    except(InvalidPipe, InvalidID):
+        setup.findDiscord()
+    time.sleep(int(setup.sleep_time))
+    print("\n")
 
-      try:
-            RPC.update(details=gameName, state=CPURSXFan, large_image=gameImage, start=timer)
-            print("Discord found")
-      except (InvalidID, InvalidPipe):
-            print("Discord not found")
-            findDiscord()
-      time.sleep(35)
-      print("\n")
+# NOTES:
+# script will only read external config file once, any changes made won't be reflected until script is restarted

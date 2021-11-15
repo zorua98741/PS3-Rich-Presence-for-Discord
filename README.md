@@ -29,7 +29,7 @@ A compiled executable (.exe) is provided for use on the windows platform.
 WARNING: This file was flagged as a virus on my computer, i do not know what causes the file to be flagged as such.
 
 Alternatively, the PS3RPD.py file can be ran from your favourite python IDE. (not the external dependencies listed [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#remote-python-packages-required)).
-Note that this script was written with pyton 3.9, i cannot provide support for early versions
+Note that this script was written with pyton 3.9, i cannot provide support for early versions.
 
 ### General instructions
 On program start, the script will prompt the user for how to get the PS3's IP address.
@@ -47,7 +47,7 @@ please contact me via Discord: "zorua98741#0023".
 ## Additional Information
 
 ### Remote Python packages required
-*These are not intended download links, they are the developers sites, please install with pip*
+*These are not intended download links, they are the developers sites, please install with pip.*
 * [urllib3](https://urllib3.readthedocs.io/en/stable/)
 * [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/)
 * [pypresence](https://github.com/qwertyquerty/pypresence)
@@ -55,11 +55,11 @@ please contact me via Discord: "zorua98741#0023".
 
 ### External config file
 PS3RPD makes use of an external config file to persistently store a few variables, on creation, the default values will be:
-* Your PS3's IP address
-* My Discord developer application's ID
-* A refresh time of 35 seconds
-* To show the PS3's temperature
-* To use a shared cover for PS2&PSX games
+* Your PS3's IP address 	(where the script will find your PS3 on the network)
+* My Discord developer application's ID 		(where the script will send presence data to)
+* A refresh time of 35 seconds 					(how often to get new data (minimum value of 15 seconds)
+* To show the PS3's temperature 				(self explanatory)
+* To use a shared cover for PS2&PSX games   	(self explanatory)
 You may change these values to suit your own tastes, an example is shown below:
 
 IP | ID | Refresh time(seconds) | Show temperatures | Individual PS2&PSX covers | Output |
@@ -69,10 +69,10 @@ IP | ID | Refresh time(seconds) | Show temperatures | Individual PS2&PSX covers 
 
 Please note that the external config file is sensitive to the data you input, and a change in the formatting **will** most likely break it.
 
-Possible values for the variables:
+Possible values for the variables:  
 * __IP:__ any valid IPv4 address
 * __ID:__ any valid Discord developer application ID
-* __Refresh time(seconds):__ any digit in range 1-1000
+* __Refresh time(seconds):__ any digit in range 15-1000 	(Note: any value <15 will be set to 15 due to developer application restraints)
 * __Show temperatures:__ [True, true] [False, false]
 * __Individual PS2&PSX covers:__ [True, true] [False, false]
 
@@ -80,7 +80,7 @@ Possible values for the variables:
 If you would like to have complete control over what images are used per game, you must create your own Discord developer application over at https://discord.com/developers/applications.
 
 Once created, copy the "APPLICATION ID" from the developer portal paste it as to replace the current string next to "ID: " in the external config file "PS3RPDconfig.txt".
-Alertnatively, if you are using the .py file, you can replace the value of line 26 "self.client_id = "
+Alertnatively, if you are using the .py file, you can replace the value of line 26 "self.client_id = ".
 
 You will now be able to add your own art assets in the developer portal under "Rich Presence > Art Assets". Note that the name of the art assets uploaded must be the same as whatever is output from "validate(): " when that specific game is open.
 
@@ -105,3 +105,8 @@ Q: Why does [insert game name here] not have an image when i play it?
 A: either you have not waited long enough for your art asset to be uploaded into your own developer application, or, you are using my developer application,
 where i am limited to adding only the games i can play on my PS3 (that i own), if you would like to use my developer application, but with more images, please [message me on discord](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#contact-me),
 and i will be more than happy to add the game/s for you.
+
+Q: Why is PS2 game detection inconsistent?  
+A: this script works by scraping game data from webmanMOD. When a PS3 goes into PS2 mode, it disables all plugins including webmanMOD,
+because of this the script will only detect a PS2 game if it refreshes itself and it finds a PS2 game mounted (but not open).  
+There is no way of fixing this issue as far as i can tell.
