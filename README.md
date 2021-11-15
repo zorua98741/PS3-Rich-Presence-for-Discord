@@ -111,6 +111,6 @@ A: this script works by scraping game data from webmanMOD. When a PS3 goes into 
 because of this the script will only detect a PS2 game if it refreshes itself and it finds a PS2 game mounted (but not open).  
 There is no way of fixing this issue as far as i can tell.
 
-Q: Can i programatically send art assets to Discord?
+Q: Can i programatically send art assets to Discord?  
 A: no, Discord does not currently offer the option to do this, 
 the only option currently is to upload the art asset to the Discord developer application and use naming conventions to call a specific art asset depending on what game is open
