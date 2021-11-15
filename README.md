@@ -64,8 +64,8 @@ You may change these values to suit your own tastes, an example is shown below:
 
 IP | ID | Refresh time(seconds) | Show temperatures | Individual PS2&PSX covers | Output |
 ---|----|-----------------------|-------------------|---------------------------|--------|
-192.168.0.13 | 780389261870235650 | 35 | True | False | ![defaults]() |
-192.168.20.5 | 123456789012345678 | 15 | False | True | ![noTemp,indivCover]() |
+192.168.0.13 | 780389261870235650 | 35 | True | False | ![defaults](https://i.imgur.com/E7M4yie.png) |
+192.168.20.5 | 123456789012345678 | 15 | False | True | ![noTemp,indivCover](https://i.imgur.com/QHMxhnj.png) |
 
 Please note that the external config file is sensitive to the data you input, and a change in the formatting **will** most likely break it.
 
@@ -92,9 +92,9 @@ If i want to add an image for Counter Strike: Global Offensive, I will open the 
 
 As shown, i would then rename the art asset on my PC "counter_strike_global_offensive_", and upload it to my Discord developer application.
 
-After a couple of minutes, CS:GO will have an art asset:
+After a couple of minutes, CS:GO will go from having no image, to displaying an art asset from the developer application:
 
-![addedasset](https://i.imgur.com/XLIsIVV.png) | ![noasset](https://i.imgur.com/8mJvYDH.png) |
+![noasset](https://i.imgur.com/8mJvYDH.png) | ![addedasset](https://i.imgur.com/XLIsIVV.png)
 
 ### (in)Frequently asked questions
 Q: Can this script be adapted for use on mobile devices?<br>
