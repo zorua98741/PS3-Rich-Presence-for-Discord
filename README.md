@@ -79,7 +79,7 @@ Possible values for the variables:
 ### Using your own images
 If you would like to have complete control over what images are used per game, you must create your own Discord developer application over at https://discord.com/developers/applications.
 
-Once created, copy the "APPLICATION ID" from the developer portal paste it as to replace the current string next to "ID: " in the external config file "PS3RPDconfig.txt".
+Once created, copy the "APPLICATION ID" from the developer portal and paste it as to replace the current string next to "ID: " in the external config file "PS3RPDconfig.txt".
 Alertnatively, if you are using the .py file, you can replace the value of line 26 "self.client_id = ".
 
 You will now be able to add your own art assets in the developer portal under "Rich Presence > Art Assets". Note that the name of the art assets uploaded must be the same as whatever is output from "validate(): " when that specific game is open.
@@ -110,3 +110,7 @@ Q: Why is PS2 game detection inconsistent?
 A: this script works by scraping game data from webmanMOD. When a PS3 goes into PS2 mode, it disables all plugins including webmanMOD,
 because of this the script will only detect a PS2 game if it refreshes itself and it finds a PS2 game mounted (but not open).  
 There is no way of fixing this issue as far as i can tell.
+
+Q: Can i programatically send art assets to Discord?
+A: no, Discord does not currently offer the option to do this, 
+the only option currently is to upload the art asset to the Discord developer application and use naming conventions to call a specific art asset depending on what game is open
