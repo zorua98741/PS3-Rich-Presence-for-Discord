@@ -19,7 +19,7 @@ Display what you are playing on your PS3 via Discord's game activity.
 
 ### Requirements
 * PS3 with either HFW&HEN, or CFW installed
-* PS3 with [webmanMOD](https://github.com/aldostools/webMAN-MOD/releases) installed (tested working with v1.47.35/36)
+* PS3 with [webmanMOD](https://github.com/aldostools/webMAN-MOD/releases) installed (tested working with v1.47.35/36/37)
 * PS3 and PC on the same network/internet connection
 * Discord installed and open on the PC running the script
 * A Python 3.9 interpreter installed on the PC if you do not wish to use the executable file
