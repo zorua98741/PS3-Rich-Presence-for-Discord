@@ -84,8 +84,7 @@ Alertnatively, if you are using the .py file, you can replace the value of line 
 
 You will now be able to add your own art assets in the developer portal under "Rich Presence > Art Assets". Note that the name of the art assets uploaded must be the same as whatever is output from "validate(): " when that specific game is open.
 
-An example:
-
+An example:  
 If i want to add an image for Counter Strike: Global Offensive, I will open the game and look for the output of "validate():" from the PS3RPD script on my PC:
 
 ![validateExample](https://i.imgur.com/7EEgUYn.png)
