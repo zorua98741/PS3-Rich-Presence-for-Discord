@@ -29,7 +29,7 @@ A compiled executable (.exe) is provided for use on the windows platform.
 WARNING: This file was flagged as a virus on my computer, i do not know what causes the file to be flagged as such.
 
 Alternatively, the PS3RPD.py file can be ran from your favourite python IDE. (you will require the external dependencies listed [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#remote-python-packages-required)).  
-Note that this script was written with pyton 3.9, i cannot provide support for early versions.
+Note that this script was written with pyton 3.9, i cannot provide support for earlier versions.
 
 ### General instructions
 On program start, the script will prompt the user for how to get the PS3's IP address.
