@@ -92,11 +92,9 @@ If i want to add an image for Counter Strike: Global Offensive, I will open the 
 
 As shown, i would then rename the art asset on my PC "counter_strike_global_offensive_", and upload it to my Discord developer application.
 
-![noasset](https://i.imgur.com/8mJvYDH.png)
-
 After a couple of minutes, CS:GO will have an art asset:
 
-![addedasset](https://i.imgur.com/XLIsIVV.png)
+![addedasset](https://i.imgur.com/XLIsIVV.png) | ![noasset](https://i.imgur.com/8mJvYDH.png) |
 
 ### (in)Frequently asked questions
 Q: Can this script be adapted for use on mobile devices?<br>
