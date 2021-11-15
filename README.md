@@ -1,94 +1,105 @@
 # PS3-Rich-Presence-for-Discord
- 
-Discord Rich Presence application for PlayStation 3 consoles on HFW&HEN/CFW. 
+Discord Rich Presence script for PS3 consoles on HFW&HEN or CFW.
 Written in Python.
 
+Display what you are playing on your PS3 via Discord's game activity.
+
 ## Features
-* Automatically find PS3 IP address (slow)
-* Display name and individual game cover of currently open PS3 game
-* Display PS3 temperature and fan speed
-* Display name and a single cover for currently open PS2 and PS1 game
- 
-## Examples
-<!-- ### Old layout
- No game 	| 	PS3 game 	|	PS2 game 	|	PS1 game 	|
- -----------|---------------|---------------|---------------|
- ![noGame](https://imgur.com/gdAaT1F.png) | ![ps3Game](https://imgur.com/ZD1BF70.png) | ![ps2Game](https://imgur.com/n7o0msJ.png) | ![ps1Game](https://imgur.com/CYlTcm6.png)
--->
-### New layout
+* Automatically find PS3 IP address
+* Display the name and a game cover for currently open PS3 game
+* Display PS3 temperature and fan speed (toggleable)
+* Display the name, and either a shared cover, or an individual cover for currently mounted PSX and PS2 game (toggleable)
+
+## Display Example
  No game 	| 	PS3 game 	|	PS2 game 	|	PS1 game 	|
  -----------|---------------|---------------|---------------|
  ![noGame](https://i.imgur.com/lw1vMGz.png) | ![ps3Game](https://i.imgur.com/aQxcbQG.png) | ![ps2Game](https://i.imgur.com/Z5vYdog.png) | ![ps1Game](https://i.imgur.com/7qfsisz.png) |
- 
+
 ## Usage
 
 ### Requirements
-* PS3 with either HFW&HEN or CFW installed
-
-* PS3 with webmanMOD installed (current working with v1.47.36)
-
+* PS3 with either HFW&HEN, or CFW installed
+* PS3 with [webmanMOD](https://github.com/aldostools/webMAN-MOD/releases) installed (tested working with v1.47.35/36)
 * PS3 and PC on the same network/internet connection
-
-* Discord installed and open on the PC running this script
+* Discord installed and open on the PC running the script
+* A Python 3.9 interpreter installed on the PC if you do not wish to use the executable file
 
 ### Installation
-A compiled .exe file is provided for use on the windows platform. 
-Full discretion: This file is flagged as a virus on my computer, i do not know what causes the file to be flagged.
+A compiled executable (.exe) is provided for use on the windows platform. 
+WARNING: This file was flagged as a virus on my computer, i do not know what causes the file to be flagged as such.
 
-Alternatively the PS3RPD.py file can be put into your favourite python IDE and ran from there. (Note the required external dependencies listed [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#remote-python-packages-required))
+Alternatively, the PS3RPD.py file can be ran from your favourite python IDE. (not the external dependencies listed [here]())
+this script was written with pyton 3.9, i cannot provide support for early versions
 
 ### General instructions
-On program start, user will be prompted for how the program should get the PS3's ip address <br>
-If manual is chosen, user can enter PS3's IP address. <br>
-If automatic is chosen, program will find the PS3's IP address. <br>
-Each IP address will be tested for 20 seconds, if your PS3 has an IP address of 192.168.0.200, it will take approx 1.1 hours to complete, due to this it is recommended to manually enter the IP. <br>
+On program start, the script will prompt the user for how to get the PS3's IP address.
 
-* NOTE: Due to the way webman works when running PS2 games, the program __will not__ update the RPC, it will instead "freeze" (This function has not been tested and will likely have bugs)
+If the manual option is chosen, the user can enter the PS3's IP address.
 
-the "implementedImage.txt" file is not required, however without it any PS3 game that does not currently have art assets will display no image at all,
-please place this file in the same directory as the .py/.exe file you are running the program from
+If the automatic option is chosen, the program will take the PC's local IP address, and attempt to connect to each address in range 2 - 254.
+Each attempt will take ~20 seconds, because of this if your PS3 has an IP address of 192.168.0.200, it will take approximately **1.1 hours** to complete.
 
- Without .txt file 	| With .txt file |
- -------------------|----------------|
- ![notxtfile](https://imgur.com/xrkHBgC.png) | ![txtfile](https://imgur.com/LQKekql.png)
+Once the script has connected to your PS3, it will generate an external config file, **"PS3RPDconfig.txt"** (more information [here]()). It will automatically begin sending the game data to your Discord profile.
 
-## Contact me
-please contact me via discord: "zorua98741#0023". <br>
-If you would like me to add game art to my developer application for your use, please message me the output of "validate():" for the game/s
+## Contact Me
+please contact me via Discord: "zorua98741#0023".
 
-## Remote Python packages required
-* urllib3
-* BeautifulSoup4
-* PyPresence
-* requests
+## Additional Information
 
-## Using your own images
-If you would like to have complete control over what images are used per game, you must create your own Discord developer application over at https://discord.com/developers/applications. <br>
-Once created, copy the "APPLICATION ID" from the developer portal and replace the value of the variable "client_id" inside the python file. **there is currently no way to use your own images with the compiled .exe file**. <br>
-You will now be able to add your own art assets in the developer portal under "Rich Presence > Art Assets". Note that there are naming conventions you will have to follow, and thus you will name the image/art asset the output of "validate():" <br>
- ![example](https://imgur.com/QUZ6GTq.png) <br>
-Note how the game's name is different to "validate()", and that to add an image for CSGO, the art asset in the Discord developer application would be named "counter_strike_global_offensive_".
-Finally, for the names of the art assets to be sent to *your* discord developer application, you have the option of either deleting "implementedImage.txt" or otherwise deleting all current text in the file, and adding your own game names.
+### Remote Python packages required
+*These are not intended download links, they are the developers sites, please install with pip*
+* [urllib3](https://urllib3.readthedocs.io/en/stable/)
+* [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/)
+* [pypresence](https://github.com/qwertyquerty/pypresence)
+* [requests](https://docs.python-requests.org/en/latest/)
 
-## (in)Frequently Asked Questions
-Q: Can this script be adapted for use on mobile devices? <br>
-A: no. While the functionality of this script could easily be adapted into a mobile app, Discord does not widely support rich presence from its mobile app. If this changes please notify me and i'll (probably) start work on it.
+### External config file
+PS3RPD makes use of an external config file to persistently store a few variables, on creation, the default values will be:
+* Your PS3's IP address
+* My Discord developer application's ID
+* A refresh time of 35 seconds
+* To show the PS3's temperature
+* To use a shared cover for PS2&PSX games
+You may change these values to suit your own tastes, an example is shown below:
+ IP | ID | Refresh time(seconds) | Show temperatures | Individual PS2&PSX covers | Output |
+ ---|----|-----------------------|-------------------|---------------------------|--------|
+192.168.0.13 | 780389261870235650 | 35 | True | False | ![defaults]() |
+192.168.20.5 | 123456789012345678 | 15 | False | True | ![noTemp,indivCover]() |
 
-Q: Can this script be used without webmanMOD? <br>
-A: no. The only other program i have encountered that i can scrape active game info from is CCAPI, which is lesser-used, and more complicated for the user to setup than webmanMOD.
+Please note that the external config file is sensitive to the data you input, and a change in the formatting **will** most likely break it.
 
-Q: Do i need to use the implementedImage.txt? <br>
-A: no, and i will be working on a way to remove it entirely.
+Possible values for the variables:
+* __IP:__ any valid IPv4 address
+* __ID:__ any valid Discord developer application ID
+* __Refresh time(seconds):__ any digit in range 1-1000
+* __Show temperatures:__ [True, true] [False, false]
+* __Individual PS2&PSX covers:__ [True, true] [False, false]
 
-Q: Why does [insert game here] not have an image when i play it? <br>
-A: I am limited to adding only the games that i can play on my PS3 (that i own) because i cannot accurately guess what the name of the image will be, if you would like to use my Discord developer application, but with more images,
-*please* [message me on discord](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#contact-me), and i will be more than happy to add the game for you.
+### Using your own images
+If you would like to have complete control over what images are used per game, you must create your own Discord developer application over at https://discord.com/developers/applications.
 
-## TODO
-* implement ability to change time between updates to RPC (currently set to 35 seconds)
-* implement ability to disable temps & fan-speed display,
-* implement ability to change Discord Developer Application without changing variables (for .exe version),
-* find a way to remove need for implementedImage.txt?,
-* rewrite this README.md so its less of a word soup, and is easier to understand
-* rework PS2 presence detection to work more often
-* implement more PS3 game covers!!
+Once created, copy the "APPLICATION ID" from the developer portal paste it as to replace the current string next to "ID: " in the external config file "PS3RPDconfig.txt".
+Alertnatively, if you are using the .py file, you can replace the value of line 26 "self.client_id = "
+
+You will now be able to add your own art assets in the developer portal under "Rich Presence > Art Assets". Note that the name of the art assets uploaded must be the same as whatever is output from "validate(): " when that specific game is open.
+
+An example:
+
+If i want to add an image for Counter Strike: Global Offensive, I will open the game and look for the output of "validate():" from the PS3RPD script on my PC:
+![validateExample](https://i.imgur.com/7EEgUYn.png)
+As shown, i would then rename the art asset on my PC "counter_strike_global_offensive_", and upload it to my Discord developer application.
+![noasset](https://i.imgur.com/8mJvYDH.png)
+After a couple of minutes, CS:GO will have an art asset:
+![addedasset](https://i.imgur.com/XLIsIVV.png)
+
+### (in)Frequently asked questions
+Q: Can this script be adapted for use on mobile devices?<br>
+A: no. While the functionality of this script could certainly be adapted into a mobile app. Discord does not support rich presence from its mobile app.
+
+Q: Can this script be used on OFW/without webmanMOD?
+A: no. The only other program i have encountered that i can scrape game info from is CCAPI, which is lesser-used, and more complicated for the user to setup than webmanMOD.
+
+Q: Why does [insert game name here] not have an image when i play it?
+A: either you have not waited long enough for your art asset to be uploaded into your own developer application, or, you are using my developer application,
+where i am limited to adding only the games i can play on my PS3 (that i own), if you would like to use my developer application, but with more images, please [message me on discord](),
+and i will be more than happy to add the game/s for you.
