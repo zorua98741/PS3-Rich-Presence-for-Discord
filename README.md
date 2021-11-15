@@ -28,8 +28,8 @@ Display what you are playing on your PS3 via Discord's game activity.
 A compiled executable (.exe) is provided for use on the windows platform. 
 WARNING: This file was flagged as a virus on my computer, i do not know what causes the file to be flagged as such.
 
-Alternatively, the PS3RPD.py file can be ran from your favourite python IDE. (not the external dependencies listed [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#remote-python-packages-required))
-this script was written with pyton 3.9, i cannot provide support for early versions
+Alternatively, the PS3RPD.py file can be ran from your favourite python IDE. (not the external dependencies listed [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#remote-python-packages-required)).
+Note that this script was written with pyton 3.9, i cannot provide support for early versions
 
 ### General instructions
 On program start, the script will prompt the user for how to get the PS3's IP address.
@@ -39,7 +39,7 @@ If the manual option is chosen, the user can enter the PS3's IP address.
 If the automatic option is chosen, the program will take the PC's local IP address, and attempt to connect to each address in range 2 - 254.
 Each attempt will take ~20 seconds, because of this if your PS3 has an IP address of 192.168.0.200, it will take approximately **1.1 hours** to complete.
 
-Once the script has connected to your PS3, it will generate an external config file, **"PS3RPDconfig.txt"** (more information [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#external-config-file)). It will automatically begin sending the game data to your Discord profile.
+Once the script has connected to your PS3, it will generate an external config file, **"PS3RPDconfig.txt"** in the same directory as the script (more information [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#external-config-file)). It will automatically begin sending the game data to your Discord profile.
 
 ## Contact Me
 please contact me via Discord: "zorua98741#0023".
@@ -87,10 +87,15 @@ You will now be able to add your own art assets in the developer portal under "R
 An example:
 
 If i want to add an image for Counter Strike: Global Offensive, I will open the game and look for the output of "validate():" from the PS3RPD script on my PC:
+
 ![validateExample](https://i.imgur.com/7EEgUYn.png)
+
 As shown, i would then rename the art asset on my PC "counter_strike_global_offensive_", and upload it to my Discord developer application.
+
 ![noasset](https://i.imgur.com/8mJvYDH.png)
+
 After a couple of minutes, CS:GO will have an art asset:
+
 ![addedasset](https://i.imgur.com/XLIsIVV.png)
 
 ### (in)Frequently asked questions
