@@ -103,5 +103,5 @@ A: no. The only other program i have encountered that i can scrape game info fro
 
 Q: Why does [insert game name here] not have an image when i play it?  
 A: either you have not waited long enough for your art asset to be uploaded into your own developer application, or, you are using my developer application,
-where i am limited to adding only the games i can play on my PS3 (that i own), if you would like to use my developer application, but with more images, please [message me on discord](),
+where i am limited to adding only the games i can play on my PS3 (that i own), if you would like to use my developer application, but with more images, please [message me on discord](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#contact-me),
 and i will be more than happy to add the game/s for you.
