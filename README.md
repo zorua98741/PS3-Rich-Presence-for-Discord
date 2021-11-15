@@ -114,3 +114,7 @@ There is no way of fixing this issue as far as i can tell.
 Q: Can i programatically send art assets to Discord?  
 A: no, Discord does not currently offer the option to do this, 
 the only option currently is to upload the art asset to the Discord developer application and use naming conventions to call a specific art asset depending on what game is open
+
+Q: I want Discord to show me playing the game's name, not playing "PS3", can i do this?  
+A: yes, however to do so each game will require its own Discord developer application, and this specific script is not made to support such a manual task.  
+If you **really** require this feature, i can slap together another version of PS3RPD and demonstrate to you how to manually add games, however i will not waste my time doing so if such a branch is not highly requested, and you will be expected to create and add the applications yourself
