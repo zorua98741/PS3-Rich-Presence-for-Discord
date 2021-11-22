@@ -44,6 +44,8 @@ Once the script has connected to your PS3, it will generate an external config f
 ## Contact Me
 please contact me via Discord: "zorua98741#0023".
 
+I have become aware of a sequence of events that will crash the script, if you are able to reproduce this, please message me what you did, or what error message is output from your python IDE
+
 ## Additional Information
 
 ### Remote Python packages required
