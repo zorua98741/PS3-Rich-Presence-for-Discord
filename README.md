@@ -120,3 +120,9 @@ the only option currently is to upload the art asset to the Discord developer ap
 Q: I want Discord to show me playing the game's name, not playing "PS3", can i do this?  
 A: yes, however to do so each game will require its own Discord developer application, and this specific script is not made to support such a manual task.  
 If you **really** require this feature, i can slap together another version of PS3RPD and demonstrate to you how to manually add games, however i will not waste my time doing so if such a branch is not highly requested, and you will be expected to create and add the applications yourself
+
+### Implemented images
+Below is a table of all games that have an art asset on **my** Discord developer application, you should be able to save these images and add them to your own developer app if you wish.  
+image | name |
+------|------|
+![rebugToolbox](https://cdn.discordapp.com/app-assets/780389261870235650/835783442657837076.png) | Rebug Toolbox |
