@@ -183,3 +183,4 @@ image | name | validated name |
 ![simpsons](https://cdn.discordapp.com/app-assets/780389261870235650/805639154191958046.png) | The Simpsons Game | the_simpsons_game_ |
 ![ps2](https://cdn.discordapp.com/app-assets/780389261870235650/835176560746168360.png) | PS2 | ps2 |
 ![psx](https://cdn.discordapp.com/app-assets/780389261870235650/835176545102463016.png) | PS1 | psx |
+![ps3rpd](https://cdn.discordapp.com/app-assets/780389261870235650/835176477653073940.png) | PS3RPD logo | xmb |
