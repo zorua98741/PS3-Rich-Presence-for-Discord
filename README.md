@@ -125,5 +125,5 @@ If you **really** require this feature, i can slap together another version of P
 Below is a table of all games that have an art asset on **my** Discord developer application, you should be able to save these images and add them to your own developer app if you wish.  
 image | name | validated name |
 ------|------|----------------|
-![rebugToolbox](https://cdn.discordapp.com/app-assets/780389261870235650/835783442657837076.png) | Rebug Toolbox | _rebug_toolbox_ |
-![batman](url("https://cdn.discordapp.com/app-assets/780389261870235650/805248753983815691.png") | Batman Arkham Asylum | batman_arkham_asylum_goty_ |
+![rebugToolbox](https://cdn.discordapp.com/app-assets/780389261870235650/835783442657837076.png) | Rebug Toolbox | \_rebug_toolbox_ |
+![batman](https://cdn.discordapp.com/app-assets/780389261870235650/805248753983815691.png) | Batman Arkham Asylum | batman_arkham_asylum_goty_ |
