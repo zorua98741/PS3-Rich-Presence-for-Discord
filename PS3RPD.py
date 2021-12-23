@@ -198,7 +198,10 @@ class GatherDetails(object):
         if ps3GameRegion != "None":                                                         # will only detect PS3 games
             self.isPS3 = True
             self.ps3Game = str(self.soup.find("a", href=True, text=True, target="_blank").find_next_sibling())
-            self.ps3Game = re.search('>(.+[\r\n]?)+<', self.ps3Game).group(1)
+            self.ps3Game = self.ps3Game.replace("\n", " ")
+            self.ps3Game = self.ps3Game.replace("&amp;", "&")
+            self.ps3Game = re.search('>(.+[\r\n]?)+<', self.ps3Game)
+            self.ps3Game = self.ps3Game.group(1)
             print("getGameInfo():   ", self.gameName)
             self.gameName = self.ps3Game
         else:                                           # If no PS3 game is open, assume user is on the XMB
@@ -244,9 +247,9 @@ class GatherDetails(object):
             self.gameName = self.gameName.replace(cleanUp[i], "")
         for i in range(len(prohibited)):
             self.gameImage = self.gameImage.replace(prohibited[i], "")
-        self.gameImage = self.gameImage.replace(" ", "_")                   # spaces " " are not allowed in image name
+        self.gameImage = self.gameImage.replace(" ", "_")                   # spaces (" ") are not allowed in image name
         self.gameImage = self.gameImage[:32]                                # max 32 characters
-        self.gameImage = self.gameImage.replace("&amp;", "&")               # reformats ampersands
+        self.gameImage = self.gameImage.replace("&amp;", "&")               # unnecessary? (instances of &amp; are removed before reaching this?)
 
         print("validate():      ", self.gameImage)
 
