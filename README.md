@@ -45,7 +45,6 @@ Once the script has connected to your PS3, it will generate an external config f
 ## Contact Me
 please contact me via Discord: "zorua98741#0023".
 
-I have become aware of a sequence of events that will crash the script, if you are able to reproduce this, please message me what you did, or what error message is output from your python IDE
 
 ## Additional Information
 
@@ -62,7 +61,8 @@ PS3RPD makes use of an external config file to persistently store a few variable
 * My Discord developer application's ID 		(where the script will send presence data to)
 * A refresh time of 35 seconds 					(how often to get new data (minimum value of 15 seconds)
 * To show the PS3's temperature 				(self explanatory)
-* To use a shared cover for PS2&PSX games   	(self explanatory)  
+* To use a shared cover for PS2&PSX games   	(self explanatory) 
+
 You may change these values to suit your own tastes, an example is shown below:
 
 IP | ID | Refresh time(seconds) | Show temperatures | Individual PS2&PSX covers | Output |
