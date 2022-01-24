@@ -9,6 +9,7 @@ Display what you are playing on your PS3 via Discord's game activity.
 * Display the name and a game cover for currently open PS3 game
 * Display PS3 temperature and fan speed (toggleable)
 * Display the name, and either a shared cover, or an individual cover for currently mounted PSX and PS2 game (toggleable)
+	- NOTE: PSX and PS2 game detection will **not** work on PSN .pkg versions
 
 ## Display Example
  No game 	| 	PS3 game 	|	PS2 game 	|	PS1 game 	|
