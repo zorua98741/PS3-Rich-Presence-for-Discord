@@ -80,6 +80,7 @@ Possible values for the variables:
 * __Individual PS2&PSX covers:__ [True, true] [False, false]
 
 ### Using your own images
+**UPDATE: Rich presence can now display images from an external server, i will be looking into if there is a viable way to do this**  
 If you would like to have complete control over what images are used per game, you must create your own Discord developer application over at https://discord.com/developers/applications.
 
 Once created, copy the "APPLICATION ID" from the developer portal and paste it as to replace the current string next to "ID: " in the external config file "PS3RPDconfig.txt".
@@ -115,8 +116,9 @@ because of this the script will only detect a PS2 game if it refreshes itself an
 There is no way of fixing this issue as far as i can tell.
 
 Q: Can i programatically send art assets to Discord?  
-A: no, Discord does not currently offer the option to do this, 
-the only option currently is to upload the art asset to the Discord developer application and use naming conventions to call a specific art asset depending on what game is open
+~~A: no, Discord does not currently offer the option to do this, 
+the only option currently is to upload the art asset to the Discord developer application and use naming conventions to call a specific art asset depending on what game is open~~
+A: maybe! I am currently working on a way to do this
 
 Q: I want Discord to show me playing the game's name, not playing "PS3", can i do this?  
 A: yes, however to do so each game will require its own Discord developer application, and this specific script is not made to support such a manual task.  
@@ -168,7 +170,7 @@ image | name | validated name |
 ![NFSHP](https://cdn.discordapp.com/app-assets/780389261870235650/806773086568710164.png) | Need for Speed Hot Pursuit | need_for_speed_hot_pursuit_ |
 ![NFSMW](https://cdn.discordapp.com/app-assets/780389261870235650/806772516307337247.png) | Need for Speed Most Wanted | need_for_speed_most_wanted_ |
 ![NFSR](https://cdn.discordapp.com/app-assets/780389261870235650/806769551013707826.png) | Need for Speed Rivals | need_for_speed_rivals_ |
-![OOA](https://cdn.discordapp.com/app-assets/780389261870235650/928285998180352063.png") | OutRun Online Arcade | outrun_online_arcade_ |
+![OOA](https://cdn.discordapp.com/app-assets/780389261870235650/928285998180352063.png) | OutRun Online Arcade | outrun_online_arcade_ |
 ![P4AU](https://cdn.discordapp.com/app-assets/780389261870235650/805669120829292576.png) | Persona 4 Arena Ultimax | persona_4_arena_ultimax_ |
 ![P5](https://cdn.discordapp.com/app-assets/780389261870235650/808652126443929601.png) | Persona 5 | persona_5_ | 
 ![RCa4o](https://cdn.discordapp.com/app-assets/780389261870235650/805666595249717248.png) | Ratchet & Clank all 4 one | ratchet__clank_all_4_one_ |
