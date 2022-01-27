@@ -241,7 +241,7 @@ class GatherDetails(object):
 
         self.gameImage = self.gameImage.lower()
         cleanUp = ["\n", "(USA)", ".bin", ".iso", ".pkg", "(EUR)", "(JAP)", "(usa)", "(eur)", "(jap)"]         # not prohibited, but not needed
-        prohibited = ["\n", ":", ";", "®", "™", "&amp", "&", "/", "'", ".", "★"]    # characters that can't be in the name
+        prohibited = ["\n", ":", ";", "®", "™", "&amp", "&", "/", "'", ".", "★", "–"]    # characters that can't be in the name
         for i in range(len(cleanUp)):
             self.gameImage = self.gameImage.replace(cleanUp[i], "")
             self.gameName = self.gameName.replace(cleanUp[i], "")
