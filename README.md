@@ -9,12 +9,16 @@ Display what you are playing on your PS3 via Discord's game activity.
 * Display the name and a game cover for currently open PS3 game
 * Display PS3 temperature and fan speed (toggleable)
 * Display the name, and either a shared cover, or an individual cover for currently mounted PSX and PS2 game (toggleable)
-	- NOTE: PSX and PS2 game detection will **not** work on PSN .pkg versions
 
 ## Display Example
  No game 	| 	PS3 game 	|	PS2 game 	|	PS1 game 	|
  -----------|---------------|---------------|---------------|
  ![noGame](https://i.imgur.com/lw1vMGz.png) | ![ps3Game](https://i.imgur.com/aQxcbQG.png) | ![ps2Game](https://i.imgur.com/Z5vYdog.png) | ![ps1Game](https://i.imgur.com/7qfsisz.png) |
+
+## Limitations
+* It is not feasible to show a game cover for games containing primarily prohibited characters (e.g. Japanese exclusive games) as discord does not support them in the dev portal, however the game's name should still display.
+- if this feature is a must to you, i can guide you through manually adding game names in the python (.py) file.
+* PSX and PS2 game detection will **not** work on PSN .pkg versions because webman does not currently show the game as mounted.
 
 ## Usage
 
@@ -26,7 +30,7 @@ Display what you are playing on your PS3 via Discord's game activity.
 * A Python 3.9 interpreter installed on the PC if you do not wish to use the executable file
 
 ### Installation
-A compiled executable (.exe) is provided for use on the windows platform. 
+A compiled executable (.exe) is provided for use on the windows platform.  
 WARNING: This file was flagged as a virus on my computer, i do not know what causes the file to be flagged as such.
 
 Alternatively, the PS3RPD.py file can be ran from your favourite python IDE. (you will require the external dependencies listed [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#remote-python-packages-required)).  
