@@ -18,8 +18,8 @@ Display what you are playing on your PS3 via Discord's game activity.
 ## Limitations
 * It is not feasible to show a game cover for games containing primarily prohibited characters (e.g. Japanese exclusive games) as discord does not support them in the dev portal, however the game's name should still display.
 	- if this feature is a must to you, i can guide you through manually adding game names in the python (.py) file.
-* PSX and PS2 game detection will **not** work on PSN .pkg versions because webman does not currently show those games as mounted.
-* PS2 game detection can be inconsistent, varying on degree of consistency by the value of "Refresh time."
+* PSX and PS2 game detection will **not** work on PSN .pkg versions because webman cannot show those games as mounted/playing.
+* PS2 ISO game detection can be inconsistent, varying on degree of consistency by the value of "Refresh time."
 
 ## Usage
 
@@ -35,7 +35,7 @@ A compiled executable (.exe) is provided for use on the windows platform.
 WARNING: This file was flagged as a virus on my computer, i do not know what causes the file to be flagged as such.
 
 Alternatively, the PS3RPD.py file can be ran from your favourite python IDE. (you will require the external dependencies listed [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#remote-python-packages-required)).  
-Note that this script was written with pyton 3.9, i cannot provide support for earlier versions.
+Note that this script was written with python 3.9, i cannot provide support for earlier versions.
 
 ### General instructions
 On program start, the script will prompt the user for how to get the PS3's IP address.
