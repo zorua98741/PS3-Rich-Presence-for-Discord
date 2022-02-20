@@ -130,4 +130,4 @@ A: yes, however to do so each game will require its own Discord developer applic
 If you **really** require this feature, i can slap together another version of PS3RPD and demonstrate to you how to manually add games, however i will not waste my time doing so if such a branch is not highly requested, and you will be expected to create and add the applications yourself
 
 ### Implemented images
-A list of games that i have made/found images for can be found [https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/wiki/Implemented-images](here)
+A list of games that i have made/found images for can be found [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/wiki/Implemented-images)
