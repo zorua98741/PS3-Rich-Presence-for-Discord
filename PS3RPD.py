@@ -258,9 +258,9 @@ setup = PrepWork()
 setup.getParams()  # goes through all defined functions in PrepWork(), minus findDiscord()
 setup.findDiscord()
 
-timer = time.time()
-
 details = GatherDetails()
+previousGameTitle = ""
+timer = time.time()
 while True:
     details.getPage()
     if setup.temperatureBoolean == "True" or setup.temperatureBoolean == "true":
@@ -268,6 +268,9 @@ while True:
     details.getGameInfo()
     details.validate()
     try:
+        if details.gameName != previousGameTitle:
+            previousGameTitle = details.gameName
+            timer = time.time()
         setup.RPC.update(details=details.gameName, state=details.CPUandRSX, large_image=details.gameImage, start=timer)
     except(InvalidPipe, InvalidID):
         setup.findDiscord()
