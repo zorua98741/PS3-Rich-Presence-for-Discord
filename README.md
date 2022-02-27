@@ -88,7 +88,7 @@ Possible values for the variables:
 * __Refresh time(seconds):__ any digit in range 15-1000 	(Note: any value <15 will be set to 15 due to developer application restraints)
 * __Show temperatures:__ [True, true] [False, false]
 * __Individual PS2&PSX covers:__ [True, true] [False, false]
-* __RReset time elapsed on game change:__ [True, true] [False, false]
+* __Reset time elapsed on game change:__ [True, true] [False, false]
 
 ### Using your own images
 **UPDATE: Rich presence can now display images from an external server, i will be looking into if there is a viable way to do this**  
