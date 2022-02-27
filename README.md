@@ -38,8 +38,8 @@ Alternatively, the PS3RPD.py file can be ran from your favourite python IDE. (yo
 Note that this script was written with python 3.9, i cannot provide support for earlier versions.
 
 ### Installing as a Windows service
-Download [NSSM](nssm.cc/release/nssm-2.24.zip) and run `nssm install <service name ie. ps3rpc>` to install PS3RPC as a Windows service.
-WARNING: PS3RPC.exe must be in a location that won't change ie. C:\ps3rpc\PS3RPC.exe
+Download [NSSM](nssm.cc/release/nssm-2.24.zip) and run `nssm install <service name ie. ps3rpd>` to install PS3RPD as a Windows service.
+WARNING: PS3RPD.exe must be in a location that won't change ie. C:\ps3rpd\PS3RPD.exe
 
 ### General instructions
 On program start, the script will prompt the user for how to get the PS3's IP address.
@@ -71,6 +71,7 @@ PS3RPD makes use of an external config file to persistently store a few variable
 * A refresh time of 35 seconds 					(how often to get new data (minimum value of 15 seconds)
 * To show the PS3's temperature 				(self explanatory)
 * To use a shared cover for PS2&PSX games   	(self explanatory) 
+* To reset the *time elapsed* whenever a new game is opened
 
 You may change these values to suit your own tastes, an example is shown below:
 
@@ -87,6 +88,7 @@ Possible values for the variables:
 * __Refresh time(seconds):__ any digit in range 15-1000 	(Note: any value <15 will be set to 15 due to developer application restraints)
 * __Show temperatures:__ [True, true] [False, false]
 * __Individual PS2&PSX covers:__ [True, true] [False, false]
+* __RReset time elapsed on game change:__ [True, true] [False, false]
 
 ### Using your own images
 **UPDATE: Rich presence can now display images from an external server, i will be looking into if there is a viable way to do this**  

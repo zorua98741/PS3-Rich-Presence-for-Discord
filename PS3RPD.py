@@ -27,6 +27,7 @@ class PrepWork(object):
         self.sleep_time = "35"                  # default sleep time is 35 seconds
         self.temperatureBoolean = "True"        # default to show temperature is True
         self.separateCovers = "False"           # default to have separate PSX and PS2 covers is False
+        self.resetTempOnGameChange = "True"
         self.RPC = None
 
     def getParams(self):
@@ -60,6 +61,11 @@ class PrepWork(object):
                 self.separateCovers = lines[4]      # fifth line in file (boolean of whether to show a shared cover or not)
                 self.separateCovers = self.separateCovers.split(": ")    # split so [0] = "Individual PS2&PSX covers: ", [1] = (value)
                 self.separateCovers = self.separateCovers[1]
+                self.separateCovers = self.separateCovers.rstrip("\n")
+
+                self.resetTempOnGameChange = lines[5]
+                self.resetTempOnGameChange = self.resetTempOnGameChange.split(": ")
+                self.resetTempOnGameChange = self.resetTempOnGameChange[1]
 
                 self.isWebman(self.ip)
             except IndexError:
@@ -142,6 +148,9 @@ class PrepWork(object):
 
         file.write("\nIndividual PS2&PSX covers: ")
         file.write(str(self.separateCovers))
+
+        file.write("\nReset time elapsed on game change: ")
+        file.write(str(self.resetTempOnGameChange))
         file.close()
 
     def findDiscord(self):
@@ -268,9 +277,10 @@ while True:
     details.getGameInfo()
     details.validate()
     try:
-        if details.gameName != previousGameTitle:
-            previousGameTitle = details.gameName
-            timer = time.time()
+        if setup.resetTempOnGameChange == "True" or setup.resetTempOnGameChange == "true":
+            if details.gameName != previousGameTitle:
+                previousGameTitle = details.gameName
+                timer = time.time()
         setup.RPC.update(details=details.gameName, state=details.CPUandRSX, large_image=details.gameImage, start=timer)
     except(InvalidPipe, InvalidID):
         setup.findDiscord()
@@ -279,3 +289,7 @@ while True:
 
 # NOTES:
 # script will only read external config file once, any changes made won't be reflected until script is restarted
+
+#TODO:
+# Change validate() to remove any characters not [a-Z0-9 ] (currently has to go through an incomplete list of prohibited characters)
+# Remove temperature display when in PS2 game?
