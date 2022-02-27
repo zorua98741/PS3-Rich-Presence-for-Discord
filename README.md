@@ -37,6 +37,10 @@ WARNING: This file was flagged as a virus on my computer, i do not know what cau
 Alternatively, the PS3RPD.py file can be ran from your favourite python IDE. (you will require the external dependencies listed [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#remote-python-packages-required)).  
 Note that this script was written with python 3.9, i cannot provide support for earlier versions.
 
+### Installing as a Windows service
+Download [NSSM](nssm.cc/release/nssm-2.24.zip) and run `nssm install <service name ie. ps3rpc>` to install PS3RPC as a Windows service.
+WARNING: PS3RPC.exe must be in a location that won't change ie. C:\ps3rpc\PS3RPC.exe
+
 ### General instructions
 On program start, the script will prompt the user for how to get the PS3's IP address.
 
