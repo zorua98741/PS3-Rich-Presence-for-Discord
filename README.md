@@ -134,5 +134,6 @@ A: maybe! I am currently working on a way to do this
 Q: I want Discord to show me playing the game's name, not playing "PS3", can i do this?  
 A: yes, however to do so each game will require its own Discord developer application, and for you to add this information to the python (.py) file manually.  
 If you would like to utilise this feature, please download and use the PS3RPDbr.py file.  
+refer to lines 272 - 289(at the bottom of the "validate" function).  
 ### Implemented images
 A list of games that i have made/found images for can be found [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/wiki/Implemented-images)
