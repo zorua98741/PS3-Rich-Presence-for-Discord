@@ -1,3 +1,10 @@
+############################################################################################
+# THIS IS THE BETA VERSION OF PS3RPD WITH SUPPORT FOR DISPLAYING THE NAME OF THE GAME IN PRESENCE
+# e.g. "Playing CSGO", instead of "Playing PS3"
+# PLEASE REPORT ANY BUGS FOUND!
+############################################################################################
+
+
 # Modules requiring install:
 # urllib3
 # BeautifulSoup4
@@ -174,6 +181,7 @@ class GatherDetails(object):
         self.gameType = None            # string containing whether game is PSX, PS2, PS3, etc.
         self.isPS3 = True               # boolean used to make PSX & PS2 games have only 1 cover
         self.gameImage = None           # Name of validated gameName
+        self.prevGame = ""
 
     def getPage(self):
         ip = setup.ip.rstrip("\n")  # remove newline from text
@@ -261,6 +269,26 @@ class GatherDetails(object):
         print("validate():      ", self.gameImage)
 
 
+        # INDIVIDUAL GAME CODE HERE
+        if self.prevGame != self.gameImage:
+            print("New game found, recreating Presence")
+            setup.RPC.close()
+            if self.gameImage == "counter_strike_global_offensive_":      # validated name of game
+                setup.RPC = Presence('948150362777468990')      # client_id/Application ID of new App
+                setup.RPC.connect()
+
+            elif self.gameImage == "mmcm_":                       # validated name of game (EVERY IF STATEMENT AFTER THE FIRST MUST USE ELIF)
+                setup.RPC = Presence('948157006852812821')      # client_id/Application iD of new App
+                setup.RPC.connect()
+            # elif self.gameImage == "":                        # insert validated game name here
+                # setup.RPC = Presence('')                      # insert discord developer application ID here
+                # setup.RPC.connect()
+            else:
+                setup.RPC = Presence('780389261870235650')      # original client_id
+                setup.RPC.connect()
+            self.prevGame = self.gameImage
+
+
 setup = PrepWork()
 setup.getParams()  # goes through all defined functions in PrepWork(), minus findDiscord()
 setup.findDiscord()
@@ -275,7 +303,7 @@ while True:
     details.getGameInfo()
     if setup.temperatureBoolean == "True" or setup.temperatureBoolean == "true":
         if details.isPS3 is False:
-            details.CPUandRSX = "　　"        # do not display temperature regardless of user preference as it is not correct when playing PS2 games
+            details.CPUandRSX = "　　"        # do not display temperature regardles of user preference as it is not correct when playing PS2 games
         else:
             details.getThermals()
     if details.gameName != previousGameTitle:

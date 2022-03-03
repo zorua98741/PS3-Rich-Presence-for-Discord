@@ -132,7 +132,7 @@ the only option currently is to upload the art asset to the Discord developer ap
 A: maybe! I am currently working on a way to do this
 
 Q: I want Discord to show me playing the game's name, not playing "PS3", can i do this?  
-A: yes, however to do so each game will require its own Discord developer application, and unless this feature is requested, I don't see a reason to support such a manual task.  
-More information [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/wiki/Display-individual-game-names-instead-of-%22Playing-PS3%22)
+A: yes, however to do so each game will require its own Discord developer application, and for you to add this information to the python (.py) file manually.  
+If you would like to utilise this feature, please download and use the PS3RPDbr.py file.  
 ### Implemented images
 A list of games that i have made/found images for can be found [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/wiki/Implemented-images)
