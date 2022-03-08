@@ -1,9 +1,25 @@
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/N4N87V7K5) [![pypresence](https://img.shields.io/badge/using-pypresence-00bb88.svg?style=for-the-badge&logo=discord&logoWidth=20)](https://github.com/qwertyquerty/pypresence)
 # PS3-Rich-Presence-for-Discord
 Discord Rich Presence script for PS3 consoles on HFW&HEN or CFW.
 Written in Python.
 
 Display what you are playing on your PS3 via Discord's game activity.
+
+## Index
+* [Features](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#features)
+* [Display example](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#display-example)
+* [Limitations](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#limitations)
+* [Usage](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#usage)
+	* [Requirements](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#requirements)
+	* [Installation](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#installation)
+	* [Installing as a windows service](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#installing-as-a-windows-service-optional)
+	* [General Instructions](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#general-instructions)
+* [Contact me](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#contact-me)
+* [Additional Information](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#additional-information)
+	* [Remote python packages required](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#remote-python-packages-required)
+	* [External config file](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#external-config-file)
+	* [Using your own images](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#using-your-own-images)
+	* [FAQ](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#infrequently-asked-questions)
+	* [Implemented images](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#implemented-images)
 
 ## Features
 * Automatically find PS3 IP address
@@ -138,3 +154,5 @@ If you would like to utilise this feature, please download and use the PS3RPDbr.
 refer to lines 272 - 289(at the bottom of the "validate" function).  
 ### Implemented images
 A list of games that i have made/found images for can be found [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/wiki/Implemented-images)
+
+## [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/N4N87V7K5) [![pypresence](https://img.shields.io/badge/using-pypresence-00bb88.svg?style=for-the-badge&logo=discord&logoWidth=20)](https://github.com/qwertyquerty/pypresence)
