@@ -9,17 +9,8 @@ Display what you are playing on your PS3 via Discord's game activity.
 * [Display example](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#display-example)
 * [Limitations](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#limitations)
 * [Usage](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#usage)
-	* [Requirements](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#requirements)
-	* [Installation](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#installation)
-	* [Installing as a windows service](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#installing-as-a-windows-service-optional)
-	* [General Instructions](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#general-instructions)
 * [Contact me](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#contact-me)
 * [Additional Information](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#additional-information)
-	* [Remote python packages required](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#remote-python-packages-required)
-	* [External config file](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#external-config-file)
-	* [Using your own images](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#using-your-own-images)
-	* [FAQ](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#infrequently-asked-questions)
-	* [Implemented images](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#implemented-images)
 
 ## Features
 * Automatically find PS3 IP address
