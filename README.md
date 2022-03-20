@@ -15,7 +15,7 @@ Display what you are playing on your PS3 via Discord's game activity.
 ## Features
 * Automatically find PS3 IP address
 * Display the name and a game cover for currently open PS3 game
-* Display PS3 temperature and fan speed (toggleable)
+* Display PS3 temperatures (toggleable)
 * Display the name, and either a shared cover, or an individual cover for currently mounted PSX and PS2 game (toggleable)
 
 ## Display Example
