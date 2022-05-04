@@ -30,12 +30,13 @@ Display what you are playing on your PS3 via Discord's game activity.
 * PS2 ISO game detection can be inconsistent, varying on degree of consistency by the value of "Refresh time."
 * Using Windows 7 is not advised due to the hoops that have to be jumped through to get the script working, but the .py file *does* work (tested with Python 3.8.6 64bit)
 	- If you want to use a .exe, [here](https://www.mediafire.com/file/ezzlcemhkmnmyn2/PS3RPD.exe/file) is a version that may or may not fully function (very little bug testing has been done)
+* The script relies on webmanMOD, and a major change to it will break this script, please message me about updated versions of webman so that i can test the script with them
 
 ## Usage
 
 ### Requirements
 * PS3 with either HFW&HEN, or CFW installed
-* PS3 with [webmanMOD](https://github.com/aldostools/webMAN-MOD/releases) installed (tested working with v1.47.35/36/37)
+* PS3 with [webmanMOD](https://github.com/aldostools/webMAN-MOD/releases) installed (tested working with v1.47.35/36/37/41)
 * PS3 and PC on the same network/internet connection
 * Discord installed and open on the PC running the script
 * A Python 3.9 interpreter installed on the PC if you do not wish to use the executable file
