@@ -4,6 +4,10 @@ Written in Python.
 
 Display what you are playing on your PS3 via Discord's game activity.
 
+## NOTE
+PS3RPD is currently being rewritten, for the time being, please use the latest release (v1.7) as the latest version of
+PS3RPD.py has known bugs
+
 ## Index
 * [Features](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#features)
 * [Display example](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#display-example)
