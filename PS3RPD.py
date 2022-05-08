@@ -3,6 +3,9 @@
 # BeautifulSoup4
 # PyPresence
 # requests
+# networkscan
+
+# modified by nychron#2911
 
 import socket
 import requests
@@ -14,12 +17,16 @@ from pypresence import InvalidID
 from urllib.request import urlopen
 from urllib.error import URLError
 import re
+import urllib.request
+import networkscan
 
 
 class PrepWork(object):
     def __init__(self):
         self.mode = "m"
-        self.octetFour = 0
+        self.currentPos = 0
+        self.networkIPS = None
+        self.webmanFound = None
         self.splitIP = []
         self.options = {"A", "a", "Auto", "auto", "Automatic", "automatic"}
         self.ip = None
@@ -87,72 +94,80 @@ class PrepWork(object):
             tempSock.close()
             self.splitIP = PCip.split(".")
             print(self.splitIP[0] + "." + self.splitIP[1] + "." + self.splitIP[2] + ".___")
+            self.networkIPS = self.getConnectedIPs(self.splitIP[0] + "." + self.splitIP[1] + "." + self.splitIP[2] + ".0")
             self.findIP()
         else:
             self.ip = input("Enter PS3's IP address: ")
             self.isWebman(self.ip)
 
+    def getConnectedIPs(self, my_network):
+        print('Running network scan.')
+        my_network = my_network + "/24"
+        my_scan = networkscan.Networkscan(my_network)
+
+        # Run the scan of hosts using pings
+        my_scan.run()
+
+        # Display the IP address of all the hosts found
+        print('Completed network scan.')
+        print(my_scan.list_of_hosts_found)
+        return my_scan.list_of_hosts_found
+
     def findIP(self):
-        self.octetFour += 1
-        if self.octetFour < 254:
-            self.ip = self.splitIP[0] + "." + self.splitIP[1] + "." + self.splitIP[2] + "." + str(self.octetFour)
-            try:
-                requests.get("http://" + self.ip)
-                print("\nHost found at: ", self.ip, end=" ")
-                self.isWebman(self.ip)
-            except requests.ConnectionError:
-                print("(", self.octetFour, ")", end="")
+        self.ip = self.networkIPS[self.currentPos]
+        self.currentPos += 1
+        print(self.ip)
+        if int(self.currentPos) < len(self.networkIPS):
+            self.webmanFound = self.isWebman(self.ip)
+            if self.webmanFound == False:
                 self.findIP()
         else:  # called if all requests in range fail to find wMAN server
             print("Automatic search process failed")
+            self.currentPos = 0
             self.getIP()
 
     def isWebman(self, ip):  # is only called if a web server is on the address
-        try:  # request needed to ensure server doesn't error out
-            ip = ip.rstrip("\n")  # remove newline from text
-            # print(ip)                                     # DEBUGGING
-            requests.get("http://" + ip)
-            quote_page = "http://" + ip
-            headers = {"User-Agent": "Mozilla/5.0"}
-            response = requests.get(quote_page, headers=headers)  # handles 401, 404, etc, errors
-            soup = BeautifulSoup(response.text, "html.parser")
-
-            pageTitle = str(soup.find('title'))
-            pageTitle = pageTitle.split()
-            if pageTitle[0] == "<title>wMAN":  # probably really bad test, should be more general
+        ip = ip.rstrip("\n")
+        try:
+            page = urllib.request.urlopen("http://" + ip, timeout=5) #pulls page content
+            p = str(page.read()) #page content to str
+            if "wMAN" in p: #very general check, it can check for anything
                 print("is wMAN")
                 self.saveIP(ip)
+                return True
             else:
                 print("not wMAN")
-                if self.mode in self.options:
+                if self.mode in self.options and self.webmanFound == False:
                     self.findIP()
                 else:
                     self.getIP()
-        except requests.ConnectionError as e:
-            print("Some error occurred on input address, did your PS3's IP address change?\n")
-            print(e, "\n")
-            self.getIP()
+                return False
+        except urllib.error.URLError as e: #likely not necessary but good to have
+            self.findIP()
+            # print("Some error occurred on input address, did your PS3's IP address change?\n")
+            # print(e, "\n")
+            # self.getIP()
+
 
     def saveIP(self, ip):
-        file = open("PS3RPDconfig.txt", "w+")  # w+ creates the file if it is missing
-        file.write("IP: ")
-        file.write(ip)  # ip changes based on what program finds/is entered
+        with open("PS3RPDconfig.txt", "w+") as file:  # w+ creates the file if it is missing
+            file.write("IP: ")
+            file.write(ip)  # ip changes based on what program finds/is entered
 
-        file.write("\nID: ")
-        file.write(str(self.client_id))  # default client_id is my own
+            file.write("\nID: ")
+            file.write(str(self.client_id))  # default client_id is my own
 
-        file.write("\nRefresh time(seconds): ")
-        file.write(str(self.sleep_time))  # default refresh time is 35 seconds, minimum 15
+            file.write("\nRefresh time(seconds): ")
+            file.write(str(self.sleep_time))  # default refresh time is 35 seconds, minimum 15
 
-        file.write("\nShow temperatures: ")
-        file.write(str(self.temperatureBoolean))  # default is true, anything else will be false
+            file.write("\nShow temperatures: ")
+            file.write(str(self.temperatureBoolean))  # default is true, anything else will be false
 
-        file.write("\nIndividual PS2&PSX covers: ")
-        file.write(str(self.separateCovers))
+            file.write("\nIndividual PS2&PSX covers: ")
+            file.write(str(self.separateCovers))
 
-        file.write("\nReset time elapsed on game change: ")
-        file.write(str(self.resetTimeOnGameChange))
-        file.close()
+            file.write("\nReset time elapsed on game change: ")
+            file.write(str(self.resetTimeOnGameChange))
 
     def findDiscord(self):
         self.RPC = Presence(self.client_id)
@@ -163,7 +178,6 @@ class PrepWork(object):
             print("findDiscord():   !not found!")
             time.sleep(15)
             self.findDiscord()
-
 
 class GatherDetails(object):
     def __init__(self):
@@ -262,8 +276,8 @@ class GatherDetails(object):
 
 
 setup = PrepWork()
-setup.getParams()  # goes through all defined functions in PrepWork(), minus findDiscord()
 setup.findDiscord()
+setup.getParams()  # goes through all defined functions in PrepWork(), minus findDiscord()
 
 details = GatherDetails()
 previousGameTitle = ""
