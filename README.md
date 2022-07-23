@@ -30,6 +30,7 @@ PS3RPD.py has known bugs
 ## Limitations
 * It is not feasible to show a game cover for games containing primarily prohibited characters (e.g. Japanese exclusive games) as discord does not support them in the dev portal, however the game's name should still display.
 	- if this feature is a must to you, i can guide you through manually adding game names in the python (.py) file.
+* PSX and PS2 game detection depends on the name of the file
 * PSX and PS2 game detection will **not** work on PSN .pkg versions because webman cannot show those games as mounted/playing.
 * PS2 ISO game detection can be inconsistent, varying on degree of consistency by the value of "Refresh time."
 * Using Windows 7 is not advised due to the hoops that have to be jumped through to get the script working, but the .py file *does* work (tested with Python 3.8.6 64bit)
