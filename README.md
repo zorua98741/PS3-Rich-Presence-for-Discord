@@ -5,8 +5,7 @@ Written in Python.
 Display what you are playing on your PS3 via Discord's game activity.
 
 ## NOTE
-PS3RPD is currently being rewritten, for the time being, please use the latest [release (v1.7)](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/tag/v1.7) as the latest version of
-PS3RPD.py has known bugs
+The latest released version of PS3RPD.py is a pre-release, some functions are incomplete and bug testing has not been done.
 
 ## Index
 * [Features](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#features)
@@ -63,7 +62,6 @@ On program start, the script will prompt the user for how to get the PS3's IP ad
 If the manual option is chosen, the user can enter the PS3's IP address.
 
 If the automatic option is chosen, the program will take the PC's local IP address, and attempt to connect to each address in range 2 - 254.
-Each attempt will take ~20 seconds, because of this if your PS3 has an IP address of 192.168.0.200, it will take approximately **1.1 hours** to complete.
 
 Once the script has connected to your PS3, it will generate an external config file, **"PS3RPDconfig.txt"** in the same directory as the script (more information [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#external-config-file)). It will automatically begin sending the game data to your Discord profile.
 
@@ -106,9 +104,31 @@ Possible values for the variables:
 * __Individual PS2&PSX covers:__ [True, true] [False, false]
 * __Reset time elapsed on game change:__ [True, true] [False, false]
 
-### Using your own images
-**UPDATE: Rich presence can now display images from an external server, i will be looking into if there is a viable way to do this**  
-If you would like to have complete control over what images are used per game, you must create your own Discord developer application over at https://discord.com/developers/applications.
+### (in)Frequently asked questions
+Q: Can this script be adapted for use on mobile devices?  
+A: no. While the functionality of this script could certainly be adapted into a mobile app. Discord does not support rich presence from its mobile app.
+
+Q: Can this script be used on OFW/without webmanMOD?  
+A: no. The only other program i have encountered that i can scrape game info from is CCAPI, which is lesser-used, and more complicated for the user to setup than webmanMOD.
+
+Q: Why is PS2 game detection inconsistent?  
+A: this script works by scraping game data from webmanMOD. When a PS3 goes into PS2 mode, it disables all plugins including webmanMOD,
+because of this the script will only detect a PS2 game if it refreshes itself and it finds a PS2 game mounted (but not open).  
+There is no way of fixing this issue as far as i can tell.
+
+Q: Can i programatically send art assets to Discord?  
+A: yes, the pre-release of the script works to implement this using the official playstation tmdb api
+
+Q: I want Discord to show me playing the game's name, not playing "PS3", can i do this?  
+A: this is possible, however it is not yet implemented into the script
+### Implemented images
+A list of games that i have made/found images for can be found [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/wiki/Implemented-images)
+
+## [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/N4N87V7K5) [![pypresence](https://img.shields.io/badge/using-pypresence-00bb88.svg?style=for-the-badge&logo=discord&logoWidth=20)](https://github.com/qwertyquerty/pypresence)
+
+
+### Using your own images [Needs rewriting for new release]
+~~If you would like to have complete control over what images are used per game, you must create your own Discord developer application over at https://discord.com/developers/applications.
 
 Once created, copy the "APPLICATION ID" from the developer portal and paste it as to replace the current string next to "ID: " in the external config file "PS3RPDconfig.txt".
 Alertnatively, if you are using the .py file, you can replace the value of line 26 "self.client_id = ".
@@ -120,38 +140,7 @@ If i want to add an image for Counter Strike: Global Offensive, I will open the 
 ![validateExample](https://i.imgur.com/7EEgUYn.png)  
 As shown, i would then rename the art asset on my PC "counter_strike_global_offensive_", and upload it to my Discord developer application.
 
-After a couple of minutes, CS:GO will go from having no image, to displaying an art asset from the developer application:  
+After a couple of minutes, CS:GO will go from having no image, to displaying an art asset from the developer application:  ~~
 before | after |
 -------|-------|
 ![noasset](https://i.imgur.com/8mJvYDH.png) | ![addedasset](https://i.imgur.com/XLIsIVV.png) |
-
-### (in)Frequently asked questions
-Q: Can this script be adapted for use on mobile devices?  
-A: no. While the functionality of this script could certainly be adapted into a mobile app. Discord does not support rich presence from its mobile app.
-
-Q: Can this script be used on OFW/without webmanMOD?  
-A: no. The only other program i have encountered that i can scrape game info from is CCAPI, which is lesser-used, and more complicated for the user to setup than webmanMOD.
-
-Q: Why does [insert game name here] not have an image when i play it?  
-A: either you have not waited long enough for your art asset to be uploaded into your own developer application, or, you are using my developer application,
-where i am limited to adding only the games i can play on my PS3 (that i own), if you would like to use my developer application, but with more images, please [message me on discord](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#contact-me),
-and i will be more than happy to add the game/s for you.
-
-Q: Why is PS2 game detection inconsistent?  
-A: this script works by scraping game data from webmanMOD. When a PS3 goes into PS2 mode, it disables all plugins including webmanMOD,
-because of this the script will only detect a PS2 game if it refreshes itself and it finds a PS2 game mounted (but not open).  
-There is no way of fixing this issue as far as i can tell.
-
-Q: Can i programatically send art assets to Discord?  
-~~A: no, Discord does not currently offer the option to do this, 
-the only option currently is to upload the art asset to the Discord developer application and use naming conventions to call a specific art asset depending on what game is open~~
-A: maybe! I am currently working on a way to do this
-
-Q: I want Discord to show me playing the game's name, not playing "PS3", can i do this?  
-A: yes, however to do so each game will require its own Discord developer application, and for you to add this information to the python (.py) file manually.  
-If you would like to utilise this feature, please download and use the PS3RPDbr.py file.  
-refer to lines 272 - 289(at the bottom of the "validate" function).  
-### Implemented images
-A list of games that i have made/found images for can be found [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/wiki/Implemented-images)
-
-## [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/N4N87V7K5) [![pypresence](https://img.shields.io/badge/using-pypresence-00bb88.svg?style=for-the-badge&logo=discord&logoWidth=20)](https://github.com/qwertyquerty/pypresence)
