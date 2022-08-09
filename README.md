@@ -127,8 +127,8 @@ A list of games that i have made/found images for can be found [here](https://gi
 ## [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/N4N87V7K5) [![pypresence](https://img.shields.io/badge/using-pypresence-00bb88.svg?style=for-the-badge&logo=discord&logoWidth=20)](https://github.com/qwertyquerty/pypresence)
 
 
-### Using your own images [Needs rewriting for new release]
-~~If you would like to have complete control over what images are used per game, you must create your own Discord developer application over at https://discord.com/developers/applications.
+### Using your own images [Not applicable to 1.8 pre-release]
+If you would like to have complete control over what images are used per game, you must create your own Discord developer application over at https://discord.com/developers/applications.
 
 Once created, copy the "APPLICATION ID" from the developer portal and paste it as to replace the current string next to "ID: " in the external config file "PS3RPDconfig.txt".
 Alertnatively, if you are using the .py file, you can replace the value of line 26 "self.client_id = ".
@@ -140,7 +140,7 @@ If i want to add an image for Counter Strike: Global Offensive, I will open the 
 ![validateExample](https://i.imgur.com/7EEgUYn.png)  
 As shown, i would then rename the art asset on my PC "counter_strike_global_offensive_", and upload it to my Discord developer application.
 
-After a couple of minutes, CS:GO will go from having no image, to displaying an art asset from the developer application:  ~~
+After a couple of minutes, CS:GO will go from having no image, to displaying an art asset from the developer application:
 before | after |
 -------|-------|
 ![noasset](https://i.imgur.com/8mJvYDH.png) | ![addedasset](https://i.imgur.com/XLIsIVV.png) |
