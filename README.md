@@ -24,8 +24,6 @@ Display what you are playing on your PS3 via Discord's game activity.
  ![noGame](https://i.imgur.com/lw1vMGz.png) | ![ps3Game](https://i.imgur.com/aQxcbQG.png) | ![ps2Game](https://i.imgur.com/Z5vYdog.png) | ![ps1Game](https://i.imgur.com/7qfsisz.png) |
 
 ## Limitations
-* It is not feasible to show a game cover for games containing primarily prohibited characters (e.g. Japanese exclusive games) as discord does not support them in the dev portal, however the game's name should still display.
-	- if this feature is a must to you, i can guide you through manually adding game names in the python (.py) file.
 * PSX and PS2 game detection depends on the name of the file
 * PSX and PS2 game detection will **not** work on PSN .pkg versions because webman cannot show those games as mounted/playing.
 * PS2 ISO game detection can be inconsistent, varying on degree of consistency by the value of "Refresh time."
