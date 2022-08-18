@@ -13,7 +13,7 @@ Display what you are playing on your PS3 via Discord's game activity.
 * [Additional Information](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#additional-information)
 
 ## Features
-* Automatically find PS3 IP address
+* Automatically find PS3 IP address (currently can be very slow, update in progress)
 * Display the name and a game cover for currently open PS3 game
 * Display PS3 temperatures (toggleable)
 * Display the name, and either a shared cover, or an individual cover for currently mounted PSX and PS2 game (toggleable)
@@ -24,6 +24,7 @@ Display what you are playing on your PS3 via Discord's game activity.
  ![noGame](https://i.imgur.com/lw1vMGz.png) | ![ps3Game](https://i.imgur.com/aQxcbQG.png) | ![ps2Game](https://i.imgur.com/Z5vYdog.png) | ![ps1Game](https://i.imgur.com/7qfsisz.png) |
 
 ## Limitations
+* __A PC must be used to display presence, there is no way to install and use this script solely on the PS3__
 * PSX and PS2 game detection depends on the name of the file
 * PSX and PS2 game detection will **not** work on PSN .pkg versions because webman cannot show those games as mounted/playing.
 * PS2 ISO game detection can be inconsistent, varying on degree of consistency by the value of "Refresh time."
@@ -35,7 +36,7 @@ Display what you are playing on your PS3 via Discord's game activity.
 
 ### Requirements
 * PS3 with either HFW&HEN, or CFW installed
-* PS3 with [webmanMOD](https://github.com/aldostools/webMAN-MOD/releases) installed (tested working with v1.47.35/36/37) (later versions of webmanMOD should be supported, but images may be broken)
+* PS3 with [webmanMOD](https://github.com/aldostools/webMAN-MOD/releases) installed 
 * PS3 and PC on the same network/internet connection
 * Discord installed and open on the PC running the script
 * A Python 3.9 interpreter installed on the PC if you do not wish to use the executable file
@@ -112,12 +113,10 @@ because of this the script will only detect a PS2 game if it refreshes itself an
 There is no way of fixing this issue as far as i can tell.
 
 Q: Can i programatically send art assets to Discord?  
-A: yes, the pre-release of the script works to implement this using the official playstation tmdb api
+A: yes, the pre-release (v1.8) of the script works to implement this using the official playstation tmdb api
 
 Q: I want Discord to show me playing the game's name, not playing "PS3", can i do this?  
 A: this is possible, however it is not yet implemented into the script
-### Implemented images
-A list of games that i have made/found images for can be found [here](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/wiki/Implemented-images)
 
 ## [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/N4N87V7K5) [![pypresence](https://img.shields.io/badge/using-pypresence-00bb88.svg?style=for-the-badge&logo=discord&logoWidth=20)](https://github.com/qwertyquerty/pypresence)
 
@@ -126,7 +125,7 @@ A list of games that i have made/found images for can be found [here](https://gi
 If you would like to have complete control over what images are used per game, you must create your own Discord developer application over at https://discord.com/developers/applications.
 
 Once created, copy the "APPLICATION ID" from the developer portal and paste it as to replace the current string next to "ID: " in the external config file "PS3RPDconfig.txt".
-Alertnatively, if you are using the .py file, you can replace the value of line 26 "self.client_id = ".
+Alertnatively, if you are using the .py file, you can replace the value of "self.client_id".
 
 You will now be able to add your own art assets in the developer portal under "Rich Presence > Art Assets". Note that the name of the art assets uploaded must be the same as whatever is output from "validate(): " when that specific game is open.
 
