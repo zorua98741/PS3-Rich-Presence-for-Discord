@@ -156,13 +156,14 @@ class PrepWork(object):
 
     def findDiscord(self):
         self.RPC = Presence(self.client_id)
-        try:
-            self.RPC.connect()
-            print("findDiscord():   found")
-        except InvalidPipe:
-            print("findDiscord():   !not found!")
-            time.sleep(15)
-            self.findDiscord()
+        while True:
+            try:
+                self.RPC.connect()
+                print("findDiscord():       found")
+                break
+            except InvalidPipe:
+                print("findDiscord():       !not found!")
+                time.sleep(10)
 
 
 class GatherDetails(object):
@@ -179,16 +180,17 @@ class GatherDetails(object):
     def getPage(self):
         ip = setup.ip.rstrip("\n")  # remove newline from text
         quote_page = "http://" + ip + "/cpursx.ps3?/sman.ps3"
-        try:
-            page = urlopen(quote_page)
-            print("getPage():       webman server found, continuing")
-            self.soup = BeautifulSoup(page, "html.parser")
-        except URLError:
-            print("getPage():       webman server not found, waiting", setup.sleep_time, "seconds before retry")
-            if self.gameType != "mount.ps3/dev_hdd0/PS2ISO":            # handles webmanMOD going down when a PS2 game is open
-                setup.RPC.clear()
-            time.sleep(float(setup.sleep_time))
-            self.getPage()
+        while True:
+            try:
+                page = urlopen(quote_page)
+                print("getPage():       webman server found, continuing")
+                self.soup = BeautifulSoup(page, "html.parser")
+                break
+            except URLError:
+                print("getPage():       webman server not found, waiting", setup.sleep_time, "seconds before retry")
+                if self.gameType != "mount.ps3/dev_hdd0/PS2ISO":            # handles webmanMOD going down when a PS2 game is open
+                    setup.RPC.clear()
+                time.sleep(float(setup.sleep_time))
 
     def getThermals(self):          # gets temperature from webmanMOD
         HTMLCPUandRSX = str(self.soup.find("a", href="/cpursx.ps3?up"))

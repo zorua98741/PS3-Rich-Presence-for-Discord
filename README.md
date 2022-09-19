@@ -1,8 +1,9 @@
 # PS3-Rich-Presence-for-Discord
 Discord Rich Presence script for PS3 consoles on HFW&HEN or CFW.
-Written in Python.
 
 Display what you are playing on your PS3 via Discord's game activity.
+
+Script must be ran on a computer, it cannot be installed directly onto a PlayStation 3.
 
 ## Index
 * [Features](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord#features)
