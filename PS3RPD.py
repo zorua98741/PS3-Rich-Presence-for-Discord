@@ -118,12 +118,11 @@ class PrepWork(object):
             soup = BeautifulSoup(response.text, "html.parser")
 
             pageTitle = str(soup.find('title'))
-            pageTitle = pageTitle.split()
-            if pageTitle[0] == "<title>wMAN":  # probably really bad test, should be more general
+            if 'wMAN' in pageTitle or 'webMAN' in pageTitle:
                 print("is wMAN")
                 self.saveIP(ip)
             else:
-                print("not wMAN")
+                print("not wMAN, page reports: ", pageTitle, '\nIf you believe this is an error, please contact the developer.\n')
                 if self.mode in self.options:
                     self.findIP()
                 else:
@@ -156,7 +155,7 @@ class PrepWork(object):
 
     def findDiscord(self):
         self.RPC = Presence(self.client_id)
-        while True:
+        while True:         # use infinite loop instead of calling self to avoid maximum recursion depth
             try:
                 self.RPC.connect()
                 print("findDiscord():       found")
@@ -180,7 +179,7 @@ class GatherDetails(object):
     def getPage(self):
         ip = setup.ip.rstrip("\n")  # remove newline from text
         quote_page = "http://" + ip + "/cpursx.ps3?/sman.ps3"
-        while True:
+        while True:         # use infinite loop instead of calling itself to avoid maximum recursion depth
             try:
                 page = urlopen(quote_page)
                 print("getPage():       webman server found, continuing")
