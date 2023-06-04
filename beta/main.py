@@ -5,6 +5,7 @@ import os  # used to test if config exists
 import requests  # used to test if given IP belongs to PS3, requires pip install
 from requests.exceptions import ConnectionError  # used to handle thrown errors on connecting to webpage
 from bs4 import BeautifulSoup   # used for webpage scraping, requires pip install
+from time import sleep          # used to add delay to mitigate rate limiting and webmanMOD memory consumption
 # from pypresence import Presence, InvalidPipe, InvalidID     # pypresence requires pip install
 
 
@@ -32,7 +33,7 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
                 self.indivRetroCovers = re.search(': (.*)', lines[4]).group(1)
                 self.resetTimer = re.search(': (.*)', lines[5]).group(1)
             except Exception as e:
-                exit(f'error with config file "{e}".')
+                exit(f'error with config file "{e}". \nTry deleting it or contact the developer.')
             if self.test_for_webman(self.ip):    # IP in config still belongs to PS3
                 pass    # ! connect and begin gathering details from webman here !
             else:   # IP in config does not belong to PS3
@@ -85,20 +86,21 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
         for i in range(len(my_scan.list_of_hosts_found)):
             if self.test_for_webman(my_scan.list_of_hosts_found[i]):
                 self.save_config(my_scan.list_of_hosts_found[i])
+                # ! connect and begin gathering details from webman here !
                 break   # do not test further IPs if one is found to belong to webman
-    # ! NEED TO HANDLE IF PS3 IS NOT FOUND !
+        # ! NEED TO HANDLE IF PS3 IS NOT FOUND !
 
     def get_IP_from_user(self):
         while True:
             ip = input("Enter PS3's IP address: ")
             if self.test_for_webman(ip):
                 self.save_config(ip)
+                # ! connect and begin gathering details from webman here !
                 break
 
     def test_for_webman(self, ip):
         response = None
         url = f'http://{ip}'
-        headers = {'Content-Type': 'text/html'}  # Alternatively {"User-Agent": "Mozilla/5.0"}
         try:    # test if ANY webpage is running on given IP
             response = requests.get(url, headers=headers)
         except ConnectionError as e:
@@ -118,8 +120,9 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
 
     def save_config(self, validatedIP):     # updates/creates the external config file
         print("Updating/Creating config with saved values")
+        self.ip = validatedIP   # update value of variable used in other class
         file = open('PS3RPDconfig.txt', 'w+')   # w+ creates file if it doesn't exist, overwriting previous content
-        file.write(f'IP: {validatedIP}\n')
+        file.write(f'IP: {self.ip}\n')
         file.write(f'clientID: {self.clientID}\n')  # use config file values if it exists, otherwise default values
         file.write(f'wait time: {self.waitTime}\n')
         file.write(f'show temperature: {self.showTemps}\n')
@@ -127,5 +130,80 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
         file.write(f'reset time elapsed on new game: {self.resetTimer}\n')
 
 
+class GatherDetails:
+    def __init__(self):
+        self.soup = None
+        self.thermalData = None
+
+    def get_html(self):
+        url = f'http://{prepWork.ip}/cpursx.ps3?/sman.ps3'
+        try:
+            response = requests.get(url, headers=headers)
+            self.soup = BeautifulSoup(response.text, 'html.parser')
+            return True
+        except ConnectionError as e:
+            print(f'get_html():  webman not found. "{e}".')
+            return False
+
+    def get_thermals(self):
+        thermalData = str(self.soup.find("a", href="/cpursx.ps3?up"))
+        # you can change to Fahrenheit by changing "C" to "F".
+        cpu = re.search('CPU(.+?)C', thermalData)
+        rsx = re.search('RSX(.+?)C', thermalData)
+        try:
+            cpu = cpu.group(0)
+            rsx = rsx.group(0)
+            self.thermalData = f'{cpu} | {rsx}'
+            print(f'get_thermals():     {self.thermalData}')
+        except AttributeError:
+            print(f'get_thermals(): could not find html for thermal data, has webmanMOD been updated since {wmanVer}?')
+
+    def decide_game_type(self):
+        # PS3 games will only be detected when they are OPEN, however PS2 and PS1 games will be detected when they are MOUNTED
+        if self.soup.find('a', target='_blank') is not None:    # PS3ISO, JB Folder Format, and PS3 PKG games will display this field in wman
+            print('decide_game_type():  PS3 Game')
+            self.get_PS3_details()
+        elif self.soup.find('a', href='/play.ps3') is not None:     # PSX, PS2, and MOUNTED PS3 games will display this field
+            child = self.soup.find('a', href='/play.ps3').find_next_siblings()
+            if not re.search('(PS3ISO|GAMES)', str(child[1])):  # PS3 games will be returned here
+                print('decide_game_type():  Retro')
+                self.get_retro_details()
+            else:
+                print('decide_game_type():  XMB')
+
+    def get_PS3_details(self):
+        titleID = self.soup.find('a', target='_blank')  # get titleID of open game/homebrew
+        name = self.soup.find('a', target='_blank').find_next_sibling()  # get name of open game/homebrew
+        try:
+            titleID = re.search('>(.*)<', str(titleID)).group(1)     # remove surrounding HTML
+            name = re.search('>(.*)<', str(name)).group(1)
+        except AttributeError:
+            print(f'get_PS3_details(): could not find html for game data, has webmanMOD been updated since {wmanVer}?')
+        print(f'get_PS3_details():  {titleID} | {name}')
+
+    def get_retro_details(self):    # only tested with PSX and PS2 games, PSP and retroarch game compatibility unknown
+        pass
+
+    def get_image(self):
+        pass
+
+
+headers = {'Content-Type': 'text/html'}  # Alternatively {"User-Agent": "Mozilla/5.0"}. Used by both classes
+wmanVer = '1.47.45'     # static string so I can indicate what ver the script was last tested with
+
 prepWork = PrepWork()
 prepWork.read_config()
+gatherDetails = GatherDetails()
+
+if prepWork.ip is None:     # very basic error notification for if prepWork breaks
+    exit('script failed to load or find IP address.')
+while True:
+    if not gatherDetails.get_html():    # triggered if webman goes down
+        print(f'Webman server not found, waiting {prepWork.waitTime} seconds.')
+        sleep(float(prepWork.waitTime))
+    else:   # continue with normal program loop
+        gatherDetails.get_thermals()
+        gatherDetails.decide_game_type()
+
+        print('')
+        sleep(float(prepWork.waitTime))
