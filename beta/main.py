@@ -1,3 +1,5 @@
+# Need to test if urllib3 causes PS3 to crash less often!
+
 from socket import socket, AF_INET, SOCK_DGRAM  # used to get host IP address
 import re  # used for regular expressions
 import networkscan  # used for automatic obtaining IP address, requires pip install
@@ -161,15 +163,12 @@ class GatherDetails:
     def decide_game_type(self):
         # PS3 games will only be detected when they are OPEN, however PS2 and PS1 games will be detected when they are MOUNTED
         if self.soup.find('a', target='_blank') is not None:    # PS3ISO, JB Folder Format, and PS3 PKG games will display this field in wman
-            print('decide_game_type():  PS3 Game')
+            print('decide_game_type():  PS3 Game or Homebrew')
             self.get_PS3_details()
-        elif self.soup.find('a', href='/play.ps3') is not None:     # PSX, PS2, and MOUNTED PS3 games will display this field
-            child = self.soup.find('a', href='/play.ps3').find_next_siblings()
-            if not re.search('(PS3ISO|GAMES)', str(child[1])):  # PS3 games will be returned here
-                print('decide_game_type():  Retro')
-                self.get_retro_details()
-            else:
-                print('decide_game_type():  XMB')
+        elif self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/(PSXISO|PS2ISO)')) is not None:  # search for PSX or PS2 mounted game
+            print('decide_game_type():  Retro')
+        else:
+            print('decide_game_type():  XMB')
 
     def get_PS3_details(self):
         titleID = self.soup.find('a', target='_blank')  # get titleID of open game/homebrew
@@ -177,6 +176,9 @@ class GatherDetails:
         try:
             titleID = re.search('>(.*)<', str(titleID)).group(1)     # remove surrounding HTML
             name = re.search('>(.*)<', str(name)).group(1)
+            # need to remove version information from name here!
+            if re.search('(.+)[0-9]{2}.[0-9]{2}', name) is not None:    # ! HASN'T BEEN BUG TESTED !
+                name = re.search('(.+)[0-9]{2}.[0-9]{2}', name).group(1)
         except AttributeError:
             print(f'get_PS3_details(): could not find html for game data, has webmanMOD been updated since {wmanVer}?')
         print(f'get_PS3_details():  {titleID} | {name}')
