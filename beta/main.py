@@ -137,6 +137,10 @@ class GatherDetails:
         self.soup = None
         self.thermalData = None
 
+    def ping_PS3(self):     # Will work if webman is unloaded for some reason, will hopefully greatly reduce risk of
+        # PS3 crashing when webman is contacted while also loading or quitting out of a game. (! Needs further testing !)
+        os.system(f'ping {prepWork.ip}')
+
     def get_html(self):
         url = f'http://{prepWork.ip}/cpursx.ps3?/sman.ps3'
         try:
@@ -167,6 +171,7 @@ class GatherDetails:
             self.get_PS3_details()
         elif self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/(PSXISO|PS2ISO)')) is not None:  # search for PSX or PS2 mounted game
             print('decide_game_type():  Retro')
+            self.get_retro_details()
         else:
             print('decide_game_type():  XMB')
 
@@ -176,15 +181,24 @@ class GatherDetails:
         try:
             titleID = re.search('>(.*)<', str(titleID)).group(1)     # remove surrounding HTML
             name = re.search('>(.*)<', str(name)).group(1)
-            # need to remove version information from name here!
-            if re.search('(.+)[0-9]{2}.[0-9]{2}', name) is not None:    # ! HASN'T BEEN BUG TESTED !
+            if re.search('(.+)[0-9]{2}.[0-9]{2}', name) is not None:    # remove game version info if present
                 name = re.search('(.+)[0-9]{2}.[0-9]{2}', name).group(1)
         except AttributeError:
             print(f'get_PS3_details(): could not find html for game data, has webmanMOD been updated since {wmanVer}?')
         print(f'get_PS3_details():  {titleID} | {name}')
 
     def get_retro_details(self):    # only tested with PSX and PS2 games, PSP and retroarch game compatibility unknown
-        pass
+        name = 'Retro'  # if a PSX or PS2 game is not detected, this default will be used
+        # name detected is based on name of file
+        if self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PSXISO')) is not None:   # only PSX
+            name = self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PSXISO')).find_next_sibling()
+        elif self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PS2ISO')) is not None: # only PS2
+            name = self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PS2ISO')).find_next_sibling()
+        try:
+            name = re.search('\">(.*)</a>', str(name)).group(1)
+        except AttributeError as e:
+            print(f'! get_retro_details(): error with regex "{e}" !')
+        print(f'get_retro_details(): {name}')
 
     def get_image(self):
         pass
