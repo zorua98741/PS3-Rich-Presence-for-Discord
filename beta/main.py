@@ -1,4 +1,4 @@
-# Need to test if urllib3 causes PS3 to crash less often!
+# ! Need to test if urllib3 causes PS3 to crash less often!
 
 from socket import socket, AF_INET, SOCK_DGRAM  # used to get host IP address
 import re  # used for regular expressions
@@ -8,7 +8,10 @@ import requests  # used to test if given IP belongs to PS3, requires pip install
 from requests.exceptions import ConnectionError  # used to handle thrown errors on connecting to webpage
 from bs4 import BeautifulSoup   # used for webpage scraping, requires pip install
 from time import sleep          # used to add delay to mitigate rate limiting and webmanMOD memory consumption
-# from pypresence import Presence, InvalidPipe, InvalidID     # pypresence requires pip install
+import subprocess   # used to send ICMP  ping packets to PS3
+import platform     # used to get operating system of PC
+import sqlite3  # used for getting image from database
+from pypresence import Presence, InvalidPipe, InvalidID     # used for sending details to Discord, requires pip install
 
 
 class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
@@ -19,6 +22,7 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
         self.showTemps = 'True'
         self.indivRetroCovers = 'False'
         self.resetTimer = 'False'
+        self.RPC = None
 
     def read_config(self):
         if os.path.isfile('PS3RPDconfig.txt'):  # test if file exists
@@ -36,16 +40,15 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
                 self.resetTimer = re.search(': (.*)', lines[5]).group(1)
             except Exception as e:
                 exit(f'error with config file "{e}". \nTry deleting it or contact the developer.')
-            if self.test_for_webman(self.ip):    # IP in config still belongs to PS3
-                pass    # ! connect and begin gathering details from webman here !
-            else:   # IP in config does not belong to PS3
-                print('IP in config file is not detected as belonging to a PS3, please check if it has changed.')
-                self.promptUser()
+            print(f'Trying {self.ip}...')
+            if not self.test_for_webman(self.ip):    # IP in config still belongs to PS3
+                print('IP in config file is not detected as belonging to a PS3, please check if it has changed and that webman is loaded.')
+                self.prompt_user()
         else:   # file does not exist
             print('no config found!')
-            self.promptUser()
+            self.prompt_user()
 
-    def promptUser(self):
+    def prompt_user(self):
         choice = 'placeholder'
         accepted = ['a', 'm']
         print("Get PS3's IP address automatically, or manually?")
@@ -131,18 +134,44 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
         file.write(f'use individual art for retro games: {self.indivRetroCovers}\n')
         file.write(f'reset time elapsed on new game: {self.resetTimer}\n')
 
+    def connect_to_discord(self):
+        self.RPC = Presence(self.clientID)
+        while True:
+            try:
+                self.RPC.connect()
+                print('connected to Discord client')
+                break
+            except InvalidPipe as e:
+                print(f'could not find Discord client running. "{e}"')
+                sleep(10)
+
 
 class GatherDetails:
     def __init__(self):
         self.soup = None
         self.thermalData = None
+        self.name = None
+        self.titleID = None
+        self.image = None
 
     def ping_PS3(self):     # Will work if webman is unloaded for some reason, will hopefully greatly reduce risk of
         # PS3 crashing when webman is contacted while also loading or quitting out of a game. (! Needs further testing !)
-        os.system(f'ping {prepWork.ip}')
+        if platform.system().lower() == 'windows':
+            command = ['ping', '-n', '5', prepWork.ip]
+        else:
+            command = ['ping', '-c', '5', prepWork.ip]
+        with open(os.devnull, 'w') as DEVNULL:  # used so output of ping doesn't spam console
+            try:
+                subprocess.check_call(command, stdout=DEVNULL)    # ! needs to be tested on Linux !
+                return True
+            except subprocess.CalledProcessError:
+                return False
 
     def get_html(self):
         url = f'http://{prepWork.ip}/cpursx.ps3?/sman.ps3'
+        if not self.ping_PS3():
+            return False
+
         try:
             response = requests.get(url, headers=headers)
             self.soup = BeautifulSoup(response.text, 'html.parser')
@@ -174,6 +203,8 @@ class GatherDetails:
             self.get_retro_details()
         else:
             print('decide_game_type():  XMB')
+            self.name = 'XMB'
+            self.image = 'xmb'
 
     def get_PS3_details(self):
         titleID = self.soup.find('a', target='_blank')  # get titleID of open game/homebrew
@@ -185,7 +216,10 @@ class GatherDetails:
                 name = re.search('(.+)[0-9]{2}.[0-9]{2}', name).group(1)
         except AttributeError:
             print(f'get_PS3_details(): could not find html for game data, has webmanMOD been updated since {wmanVer}?')
+        self.name = name
+        self.titleID = titleID
         print(f'get_PS3_details():  {titleID} | {name}')
+        self.get_PS3_image()
 
     def get_retro_details(self):    # only tested with PSX and PS2 games, PSP and retroarch game compatibility unknown
         name = 'Retro'  # if a PSX or PS2 game is not detected, this default will be used
@@ -194,32 +228,63 @@ class GatherDetails:
             name = self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PSXISO')).find_next_sibling()
         elif self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PS2ISO')) is not None: # only PS2
             name = self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PS2ISO')).find_next_sibling()
+            # ! can set a boolean here if need to know a PS2 game is mounted !
         try:
             name = re.search('\">(.*)</a>', str(name)).group(1)
         except AttributeError as e:
             print(f'! get_retro_details(): error with regex "{e}" !')
+        self.name = name
         print(f'get_retro_details(): {name}')
+        self.get_retro_image()
 
-    def get_image(self):
-        pass
+    def get_PS3_image(self):    # can use db if present, uses 'titleID' for image names
+        imgName = self.titleID.lower()  # by default set titleID as image name for Discord developer application (must be lowercase)
+        if os.path.isfile('psimg.db'):  # test if database is in same directory as script
+            con = sqlite3.connect('psimg.db')   # connect to DB
+            cur = con.cursor()
+            result = cur.execute(f"SELECT * FROM PS3 WHERE titleID == '{self.titleID.upper()}'")    # must be uppercase for db
+            result = result.fetchall()
+            if len(result) == 0:    # no value found
+                print(f'titleID "{self.titleID}" not found in database, using Discord developer application')
+            else:
+                imgName = result[0][2]  # [0] = titleID, [1] = name, [2] = imageURL
+                imgName = re.sub('[ \n]', '', imgName)  # removes newline (\n) and space ( ) that is present in database for some reason
+            con.close()
+        self.image = imgName
+        print(f'get_PS3_image():    {imgName}')
+
+    def get_retro_image(self):  # uses 'name' for image names
+        # apply Discord developer application naming conventions
+        imgName = self.name.lower()  # must be lowercase
+        imgName = imgName.replace(" ", "_")     # replace spaces with underscores
+        imgName = imgName.replace('&amp;', '')  # regex below would only remove "&" without this
+        imgName = re.sub('[\W]+', '', imgName)  # replace any non-letter, digit, or underscore
+        imgName = imgName[:32]  # maximum length of 32 characters
+        self.image = imgName
+        print(f'get_retro_image():  {imgName}')
 
 
 headers = {'Content-Type': 'text/html'}  # Alternatively {"User-Agent": "Mozilla/5.0"}. Used by both classes
 wmanVer = '1.47.45'     # static string so I can indicate what ver the script was last tested with
 
 prepWork = PrepWork()
-prepWork.read_config()
+prepWork.read_config()  # runs through majority of functions in PrepWork class
+prepWork.connect_to_discord()
 gatherDetails = GatherDetails()
 
-if prepWork.ip is None:     # very basic error notification for if prepWork breaks
+
+if prepWork.ip is None:     # very basic error notification for if PrepWork breaks
     exit('script failed to load or find IP address.')
 while True:
     if not gatherDetails.get_html():    # triggered if webman goes down
-        print(f'Webman server not found, waiting {prepWork.waitTime} seconds.')
+        print(f'PS3 not found on network, waiting {prepWork.waitTime} seconds.')
         sleep(float(prepWork.waitTime))
     else:   # continue with normal program loop
+        print('')
         gatherDetails.get_thermals()
         gatherDetails.decide_game_type()
-
-        print('')
+        prepWork.RPC.update(details=gatherDetails.name, state=gatherDetails.thermalData, large_image=gatherDetails.image, large_text=gatherDetails.titleID)
         sleep(float(prepWork.waitTime))
+
+
+# ! Currently "show temperature", "use individual art for retro games", "reset time elapsed on new game" are not implemented !
