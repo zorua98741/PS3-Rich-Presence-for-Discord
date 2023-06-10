@@ -13,7 +13,7 @@ Display what you are playing on your PS3 via Discord's game activity.
 * PSX and PS2 game detection depends on the name of the file
 * PSX and PS2 game detection will **not** work on PSN .pkg versions because webman cannot show those games as mounted/playing.
 * PS2 ISO game detection can be inconsistent, varying on degree of consistency by the value of "Refresh time."
-* Using Windows 7 is only possible with up to version 1.7.2
+* Using Windows 7 is only possible with up to PS3RPD version 1.7.2
 	- If you want to use a .exe, [here](https://www.mediafire.com/file/ezzlcemhkmnmyn2/PS3RPD.exe/file) is a version that may or may not fully function (very little bug testing has been done)
 * The script relies on webmanMOD, and a major change to it will break this script, please message me about updated versions of webman so that i can test the script with them
 

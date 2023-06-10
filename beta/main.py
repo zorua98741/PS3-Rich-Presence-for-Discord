@@ -223,16 +223,17 @@ class GatherDetails:
 
     def get_retro_details(self):    # only tested with PSX and PS2 games, PSP and retroarch game compatibility unknown
         name = 'Retro'  # if a PSX or PS2 game is not detected, this default will be used
-        # name detected is based on name of file
-        if self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PSXISO')) is not None:   # only PSX
-            name = self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PSXISO')).find_next_sibling()
-        elif self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PS2ISO')) is not None: # only PS2
-            name = self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PS2ISO')).find_next_sibling()
-            # ! can set a boolean here if need to know a PS2 game is mounted !
-        try:
-            name = re.search('\">(.*)</a>', str(name)).group(1)
-        except AttributeError as e:
-            print(f'! get_retro_details(): error with regex "{e}" !')
+        if prepWork.indivRetroCovers.lower()[0] == 't':     # # first character of variable in lowercase
+            # name detected is based on name of file
+            if self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PSXISO')) is not None:   # only PSX
+                name = self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PSXISO')).find_next_sibling()
+            elif self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PS2ISO')) is not None: # only PS2
+                name = self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PS2ISO')).find_next_sibling()
+                # ! can set a boolean here if need to know a PS2 game is mounted !
+            try:
+                name = re.search('\">(.*)</a>', str(name)).group(1)
+            except AttributeError as e:
+                print(f'! get_retro_details(): error with regex "{e}" !')
         self.name = name
         print(f'get_retro_details(): {name}')
         self.get_retro_image()
@@ -281,8 +282,10 @@ while True:
         sleep(float(prepWork.waitTime))
     else:   # continue with normal program loop
         print('')
-        gatherDetails.get_thermals()
+        if prepWork.showTemps.lower()[0] == 't':    # first character of variable in lowercase
+            gatherDetails.get_thermals()
         gatherDetails.decide_game_type()
+        # print(f'{gatherDetails.name}, {gatherDetails.thermalData}, {gatherDetails.image}, {gatherDetails.titleID}')   # debugging
         prepWork.RPC.update(details=gatherDetails.name, state=gatherDetails.thermalData, large_image=gatherDetails.image, large_text=gatherDetails.titleID)
         sleep(float(prepWork.waitTime))
 
