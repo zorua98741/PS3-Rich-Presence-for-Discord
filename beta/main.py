@@ -1,5 +1,3 @@
-# ! Need to test if urllib3 causes PS3 to crash less often!
-
 from socket import socket, AF_INET, SOCK_DGRAM  # used to get host IP address
 import re  # used for regular expressions
 import networkscan  # used for automatic obtaining IP address, requires pip install
@@ -12,6 +10,7 @@ import subprocess   # used to send ICMP  ping packets to PS3
 import platform     # used to get operating system of PC
 import sqlite3  # used for getting image from database
 from pypresence import Presence, InvalidPipe, InvalidID     # used for sending details to Discord, requires pip install
+from time import time
 
 
 class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
@@ -21,7 +20,6 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
         self.waitTime = '35'  # seconds
         self.showTemps = 'True'
         self.indivRetroCovers = 'False'
-        self.resetTimer = 'False'
         self.RPC = None
 
     def read_config(self):
@@ -37,7 +35,6 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
                     self.waitTime = "15"
                 self.showTemps = re.search(': (.*)', lines[3]).group(1)
                 self.indivRetroCovers = re.search(': (.*)', lines[4]).group(1)
-                self.resetTimer = re.search(': (.*)', lines[5]).group(1)
             except Exception as e:
                 exit(f'error with config file "{e}". \nTry deleting it or contact the developer.')
             print(f'Trying {self.ip}...')
@@ -51,7 +48,7 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
     def prompt_user(self):
         choice = 'placeholder'
         accepted = ['a', 'm']
-        print("Get PS3's IP address automatically, or manually?")
+        print("\nGet PS3's IP address automatically, or manually?")
         while choice[0].lower() not in accepted:  # test if first character of choice is in array
             choice = input('Please enter either "A", or "M": ')
         if choice[0].lower() == 'a':
@@ -77,30 +74,35 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
             self.scan_network(hostNetwork)
 
     def scan_network(self, my_network):  # takes IPv4 address in form 'x.x.x.'
+        found = False
         # adapted from nychron's code
         my_network += '0/24'  # append 4th octet and short-form subnet mask
-        my_scan = networkscan.Networkscan(my_network)
 
         # Run the scan of hosts using pings
-        my_scan.run()
+        while True:
+            my_scan = networkscan.Networkscan(my_network)
+            my_scan.run()
 
-        # Display the IP address of all the hosts found
-        print('Completed network scan.')
-        print(my_scan.list_of_hosts_found)
+            # Display the IP address of all the hosts found
+            print('Completed network scan.')
+            print(my_scan.list_of_hosts_found)
 
-        for i in range(len(my_scan.list_of_hosts_found)):
-            if self.test_for_webman(my_scan.list_of_hosts_found[i]):
-                self.save_config(my_scan.list_of_hosts_found[i])
-                # ! connect and begin gathering details from webman here !
-                break   # do not test further IPs if one is found to belong to webman
-        # ! NEED TO HANDLE IF PS3 IS NOT FOUND !
+            for i in range(len(my_scan.list_of_hosts_found)):
+                if self.test_for_webman(my_scan.list_of_hosts_found[i]):
+                    self.save_config(my_scan.list_of_hosts_found[i])
+                    found = True
+                    break   # do not test further IPs if one is found to belong to webman
+            if found is True:   # need second IF statement to break out of while loop
+                break
+            else:
+                print('PS3 not found on network, waiting 20 seconds before retry')
+                sleep(20)
 
     def get_IP_from_user(self):
         while True:
             ip = input("Enter PS3's IP address: ")
             if self.test_for_webman(ip):
                 self.save_config(ip)
-                # ! connect and begin gathering details from webman here !
                 break
 
     def test_for_webman(self, ip):
@@ -132,7 +134,6 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
         file.write(f'wait time: {self.waitTime}\n')
         file.write(f'show temperature: {self.showTemps}\n')
         file.write(f'use individual art for retro games: {self.indivRetroCovers}\n')
-        file.write(f'reset time elapsed on new game: {self.resetTimer}\n')
 
     def connect_to_discord(self):
         self.RPC = Presence(self.clientID)
@@ -143,7 +144,7 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
                 break
             except InvalidPipe as e:
                 print(f'could not find Discord client running. "{e}"')
-                sleep(10)
+                sleep(20)
 
 
 class GatherDetails:
@@ -205,6 +206,7 @@ class GatherDetails:
             print('decide_game_type():  XMB')
             self.name = 'XMB'
             self.image = 'xmb'
+            self.titleID = None     # even though not used needs to be reset so prev titleID is not shown on XMB
 
     def get_PS3_details(self):
         titleID = self.soup.find('a', target='_blank')  # get titleID of open game/homebrew
@@ -219,15 +221,16 @@ class GatherDetails:
         self.name = name
         self.titleID = titleID
         print(f'get_PS3_details():  {titleID} | {name}')
-        self.get_PS3_image()
+        if prevTitle != titleID:    # only get new image if a new game is found
+            self.get_PS3_image()
 
     def get_retro_details(self):    # only tested with PSX and PS2 games, PSP and retroarch game compatibility unknown
-        name = 'Retro'  # if a PSX or PS2 game is not detected, this default will be used
+        name = 'Retro'  # if a PSX or PS2 game is not detected, or extern variable is False, this default will be used
         if prepWork.indivRetroCovers.lower()[0] == 't':     # # first character of variable in lowercase
             # name detected is based on name of file
-            if self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PSXISO')) is not None:   # only PSX
+            if self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PSXISO')) is not None:       # only PSX
                 name = self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PSXISO')).find_next_sibling()
-            elif self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PS2ISO')) is not None: # only PS2
+            elif self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PS2ISO')) is not None:     # only PS2
                 name = self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/PS2ISO')).find_next_sibling()
                 # ! can set a boolean here if need to know a PS2 game is mounted !
             try:
@@ -238,7 +241,7 @@ class GatherDetails:
         print(f'get_retro_details(): {name}')
         self.get_retro_image()
 
-    def get_PS3_image(self):    # can use db if present, uses 'titleID' for image names
+    def get_PS3_image(self):    # can use db if present, uses 'titleID' for image names for both db and dev app
         imgName = self.titleID.lower()  # by default set titleID as image name for Discord developer application (must be lowercase)
         if os.path.isfile('psimg.db'):  # test if database is in same directory as script
             con = sqlite3.connect('psimg.db')   # connect to DB
@@ -269,13 +272,15 @@ headers = {'Content-Type': 'text/html'}  # Alternatively {"User-Agent": "Mozilla
 wmanVer = '1.47.45'     # static string so I can indicate what ver the script was last tested with
 
 prepWork = PrepWork()
+prepWork.connect_to_discord()   # running NetworkScan before PyPresence breaks asyncIO, I am not motivated enough to find proper fix.
 prepWork.read_config()  # runs through majority of functions in PrepWork class
-prepWork.connect_to_discord()
 gatherDetails = GatherDetails()
-
+timer = time()  # start timer
+prevTitle = ''  # set default value to be compared in get_PS3_details()
 
 if prepWork.ip is None:     # very basic error notification for if PrepWork breaks
-    exit('script failed to load or find IP address.')
+    exit('script failed to execute critical functions.')
+
 while True:
     if not gatherDetails.get_html():    # triggered if webman goes down
         print(f'PS3 not found on network, waiting {prepWork.waitTime} seconds.')
@@ -286,8 +291,10 @@ while True:
             gatherDetails.get_thermals()
         gatherDetails.decide_game_type()
         # print(f'{gatherDetails.name}, {gatherDetails.thermalData}, {gatherDetails.image}, {gatherDetails.titleID}')   # debugging
-        prepWork.RPC.update(details=gatherDetails.name, state=gatherDetails.thermalData, large_image=gatherDetails.image, large_text=gatherDetails.titleID)
+        try:
+            prepWork.RPC.update(details=gatherDetails.name, state=gatherDetails.thermalData, large_image=gatherDetails.image, large_text=gatherDetails.titleID, start=timer)
+        except(InvalidPipe, InvalidID):
+            prepWork.RPC.close()    # close Presence if Discord is not found     ! Does this actually do anything? !
+            prepWork.connect_to_discord()   # start connection loop
+        prevTitle = gatherDetails.titleID   # set new value for next loop
         sleep(float(prepWork.waitTime))
-
-
-# ! Currently "show temperature", "use individual art for retro games", "reset time elapsed on new game" are not implemented !
