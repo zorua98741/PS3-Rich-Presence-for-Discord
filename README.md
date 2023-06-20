@@ -15,17 +15,18 @@ Display what you are playing on your PS3 via Discord's game activity.
 	</tr>
 	<tr>
 		<th>Retro</th>
-		<th> <img src="https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/blob/main/img/xmb.png?raw=true"> </th>
+		<th> <img src="https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/blob/main/img/retro.png?raw=true"> </th>
 	</tr>
 </table>
+
 ## Limitations
 * __A PC must be used to display presence, there is no way to install and use this script solely on the PS3__
-* PSX and PS2 game detection depends on the name of the file
+* The script relies on webmanMOD, and a major change to it will break this script, please message me about updated versions of webman so that i can test the script with them
+* PSX and PS2 game name depends on the name of the file
 * PSX and PS2 game detection will **not** work on PSN .pkg versions because webman cannot show those games as mounted/playing.
 * PS2 ISO game detection can be inconsistent, varying on degree of consistency by the value of "Refresh time."
 * Using Windows 7 is only possible with up to PS3RPD version 1.7.2
 	- If you want to use a .exe, [here](https://www.mediafire.com/file/ezzlcemhkmnmyn2/PS3RPD.exe/file) is a version that may or may not fully function (very little bug testing has been done)
-* The script relies on webmanMOD, and a major change to it will break this script, please message me about updated versions of webman so that i can test the script with them
 
 ## Usage
 
@@ -48,7 +49,7 @@ Download [NSSM](nssm.cc/release/nssm-2.24.zip) and run `nssm install <service na
 WARNING: PS3RPD.exe must be in a location that won't change ie. C:\ps3rpd\PS3RPD.exe
 
 ## Contact Me
-please contact me via Discord: "zorua98741#0023"/"zorua98741".
+please contact me via Discord: "zorua98741"/"zorua98741#0023".
 
 ## Additional Information
 
@@ -59,15 +60,13 @@ PS3RPD makes use of an external config file to persistently store a few variable
 * A refresh time of 35 seconds 					(how often to get new data (minimum value of 15 seconds)
 * To show the PS3's temperature 				(self explanatory)
 * To use a shared cover for PS2&PSX games   	(self explanatory) 
-* To reset the *time elapsed* whenever a new game is opened
 
 Possible values for the variables:  
 * __IP:__ any valid IPv4 address
 * __ID:__ any valid Discord developer application ID
-* __Refresh time(seconds):__ any digit in range 15-1000 	(Note: any value <15 will be set to 15 due to developer application restraints)
-* __Show temperatures:__ [True, true] [False, false]
-* __Individual PS2&PSX covers:__ [True, true] [False, false]
-* __Reset time elapsed on game change:__ [True, true] [False, false]
+* __Refresh time(seconds):__ any digit greater than 15 	(Note: any value <15 will be set to 15 due to developer application restraints)
+* __Show temperatures:__ True or False
+* __Individual PS2&PSX covers:__ True or False
 
 
 ### Using your own images
