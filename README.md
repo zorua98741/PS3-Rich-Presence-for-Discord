@@ -4,10 +4,20 @@ Discord Rich Presence script for PS3 consoles on HFW&HEN or CFW.
 Display what you are playing on your PS3 via Discord's game activity.
 
 ## Display Example
- No game 	| 	PS3 game 	|	PS2 game 	|	PS1 game 	|
- -----------|---------------|---------------|---------------|
- ![noGame](https://i.imgur.com/lw1vMGz.png) | ![ps3Game](https://i.imgur.com/aQxcbQG.png) | ![ps2Game](https://i.imgur.com/Z5vYdog.png) | ![ps1Game](https://i.imgur.com/7qfsisz.png) |
-
+<table>
+	<tr>
+		<th>XMB</th>
+		<th>https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/blob/main/img/xmb.png</th>
+	</tr>
+	<tr>
+		<th>PS3</th>
+		<th>https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/blob/main/img/ps3.png</th>
+	</tr>
+	<tr>
+		<th>Retro</th>
+		<th>https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/blob/main/img/xmb.png</th>
+	</tr>
+</table>
 ## Limitations
 * __A PC must be used to display presence, there is no way to install and use this script solely on the PS3__
 * PSX and PS2 game detection depends on the name of the file
