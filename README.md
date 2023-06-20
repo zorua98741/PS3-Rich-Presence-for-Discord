@@ -19,6 +19,10 @@ Display what you are playing on your PS3 via Discord's game activity.
 	</tr>
 </table>
 
+## Download
+* [version 1.8.1 .exe](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.8.1/PS3RPD.exe)
+* [version 1.8.1 .py](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.8.1/PS3RPD.py)
+* (optional) [version 1.0 image database](https://github.com/zorua98741/game-db-editor/raw/main/psimg.db)
 ## Limitations
 * __A PC must be used to display presence, there is no way to install and use this script solely on the PS3__
 * The script relies on webmanMOD, and a major change to it will break this script, please message me about updated versions of webman so that i can test the script with them
