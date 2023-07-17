@@ -20,13 +20,13 @@ Display what you are playing on your PS3 via Discord's game activity.
 </table>
 
 ## Download
-* [version 1.8.1 .exe](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.9/PS3RPD.exe)  
+* [version 1.9 .exe](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.9/PS3RPD.exe)  
 or
-* [version 1.8.1 .py](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.9/PS3RPD.py)
+* [version 1.9 .py](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.9/PS3RPD.py)
 
 ### Note
 The executable file will very likely be flagged as a virus on your computer due to pyinstaller being used to compile it.  
-If you wish to use the optional image database, place it in the same directory as the .py or .exe
+If you wish to use the optional image database (psimg.db), place it in the same directory as the .py or .exe
 
 ## Contact Me
 Contact me via Discord: "zorua98741"/"zorua98741#0023".
@@ -60,8 +60,9 @@ PS3RPD makes use of an external config file to persistently store a few variable
 * Your PS3's IP address 	(where the script will find your PS3 on the network)
 * My Discord developer application's ID 		(where the script will send presence data to)
 * A refresh time of 35 seconds 					(how often to get new data (minimum value of 15 seconds)
-* To show the PS3's temperature 				(self explanatory)
-* To use a shared cover for PS2&PSX games   	(self explanatory) 
+* To show the PS3's temperature
+* To use a shared cover for PS2&PSX games
+* To display the time elapsed
 
 
 ### Using your own images
