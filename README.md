@@ -20,10 +20,9 @@ Display what you are playing on your PS3 via Discord's game activity.
 </table>
 
 ## Download
-* [version 1.8.1 .exe](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.8.1/PS3RPD.exe)  
+* [version 1.8.1 .exe](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.9/PS3RPD.exe)  
 or
-* [version 1.8.1 .py](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.8.1/PS3RPD.py)
-* (optional) [version 1.0 image database](https://github.com/zorua98741/game-db-editor/raw/main/psimg.db)
+* [version 1.8.1 .py](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.9/PS3RPD.py)
 
 ### Note
 The executable file will very likely be flagged as a virus on your computer due to pyinstaller being used to compile it.  
