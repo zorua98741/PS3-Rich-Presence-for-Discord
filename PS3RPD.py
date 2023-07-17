@@ -20,6 +20,7 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
         self.waitTime = '35'  # seconds
         self.showTemps = 'True'
         self.indivRetroCovers = 'False'
+        self.showTimer = 'True'
         self.RPC = None
 
     def read_config(self):
@@ -35,6 +36,7 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
                     self.waitTime = "15"
                 self.showTemps = re.search(': (.*)', lines[3]).group(1)
                 self.indivRetroCovers = re.search(': (.*)', lines[4]).group(1)
+                self.showTimer = re.search(': (.*)', lines[5]).group(1)
             except Exception as e:
                 exit(f'error with config file "{e}". \nTry deleting it or contact the developer.')
             print(f'Trying {self.ip}...')
@@ -134,6 +136,7 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
         file.write(f'wait time: {self.waitTime}\n')
         file.write(f'show temperature: {self.showTemps}\n')
         file.write(f'use individual art for retro games: {self.indivRetroCovers}\n')
+        file.write(f'show time elapsed: {self.showTimer}\n')
 
     def connect_to_discord(self):
         while True:
@@ -241,21 +244,52 @@ class GatherDetails:
         print(f'get_retro_details(): {name}')
         self.get_retro_image()
 
-    def get_PS3_image(self):    # can use db if present, uses 'titleID' for image names for both db and dev app
-        imgName = self.titleID.lower()  # by default set titleID as image name for Discord developer application (must be lowercase)
-        if os.path.isfile('psimg.db'):  # test if database is in same directory as script
-            con = sqlite3.connect('psimg.db')   # connect to DB
-            cur = con.cursor()
-            result = cur.execute(f"SELECT * FROM PS3 WHERE titleID == '{self.titleID.upper()}'")    # must be uppercase for db
-            result = result.fetchall()
-            if len(result) == 0:    # no value found
-                print(f'titleID "{self.titleID}" not found in database, using Discord developer application')
-            else:
-                imgName = result[0][2]  # [0] = titleID, [1] = name, [2] = imageURL
-                imgName = re.sub('[ \n]', '', imgName)  # removes newline (\n) and space ( ) that is present in database for some reason
+    def get_PS3_image(self):    # can use psimg.db if present, otherwise try gametdb before falling back on Discord dev app
+        self.image = self.titleID.lower()  # by default set titleID as image name for Discord developer application (must be lowercase)
+        if os.path.isfile('apsimg.db'):  # test if database is in same directory as script
+            self.image = self.use_local_db()
+        else:   # attempt to get image from GameTDB
+            self.image = self.use_gametdb()
+        print(f'get_PS3_image():    {self.image}')
+
+    def use_local_db(self):     # Google might of broken this, doesn't seem to work on my end anymore
+        con = sqlite3.connect('psimg.db')  # connect to DB
+        cur = con.cursor()
+        result = cur.execute(f"SELECT * FROM PS3 WHERE titleID == '{self.titleID.upper()}'")  # must be uppercase for db
+        result = result.fetchall()
+        if len(result) == 0:  # no value found
+            print(f'titleID "{self.titleID}" not found in database, using Discord developer application')
             con.close()
-        self.image = imgName
-        print(f'get_PS3_image():    {imgName}')
+            return self.titleID.lower()     # bandaid fix
+        else:
+            imgName = result[0][2]  # [][0] = titleID, [][1] = name, [][2] = imageURL
+            imgName = re.sub('[ \n]', '',
+                             imgName)  # removes newline (\n) and space ( ) that is present in database for some reason
+            con.close()
+            print('using psimg.db')
+            return imgName
+
+    def use_gametdb(self):  # Original idea from AndreCox
+        region_map = {      # this needs further testing
+            "A": "ZH",  # ?
+            "E": "EN",
+            "H": "US",  # ?
+            "J": "JA",
+            "K": "KO",
+            "U": "US"
+        }
+        val = region_map.get(self.titleID[2])    # feed region_map 3rd char of titleID. use get() to handle unexpected keys
+        if not val:
+            print(f'! use_gametdb(): Unexpected key: {self.titleID[2]} ! \nFalling back to Discord dev app images')
+            return self.titleID.lower()     # bandaid fix, use Discord dev app
+        else:
+            url = f'https://art.gametdb.com/ps3/cover/{val}/{self.titleID}.jpg'  # build URL
+            status = requests.get(url)
+            if status.status_code == 200:   # test if page exists
+                print('using GameTDB')
+                return url
+            else:
+                return self.titleID.lower()     # bandaid fix, use Discord dev app
 
     def get_retro_image(self):  # uses 'name' for image names
         # apply Discord developer application naming conventions
@@ -275,7 +309,9 @@ prepWork = PrepWork()
 prepWork.connect_to_discord()   # running NetworkScan before PyPresence breaks asyncIO, I am not motivated enough to find proper fix.
 prepWork.read_config()  # runs through majority of functions in PrepWork class
 gatherDetails = GatherDetails()
-timer = time()  # start timer
+timer = None    # default value for if config set to false
+if prepWork.showTimer.lower()[0] == 't':
+    timer = time()  # start timer
 prevTitle = ''  # set default value to be compared in get_PS3_details()
 
 if prepWork.ip is None:     # very basic error notification for if PrepWork breaks
