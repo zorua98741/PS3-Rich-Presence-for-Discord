@@ -193,6 +193,7 @@ class GatherDetails:
             cpu = cpu.group(0)
             rsx = rsx.group(0)
             self.thermalData = f'{cpu} | {rsx}'
+            self.thermalData = self.thermalData.replace('Â', '')    # ! bandaid fix ! ANSI encoding is being used on some users??
             print(f'get_thermals():     {self.thermalData}')
         except AttributeError:
             print(f'get_thermals(): could not find html for thermal data, has webmanMOD been updated since {wmanVer}?')
@@ -302,7 +303,7 @@ class GatherDetails:
         print(f'get_retro_image():  {imgName}')
 
 
-headers = {'Content-Type': 'text/html'}  # Alternatively {"User-Agent": "Mozilla/5.0"}. Used by both classes
+headers = {"User-Agent": "Mozilla/5.0"}  # Alternatively {'Content-Type': 'text/html'}. Used by both classes
 wmanVer = '1.47.45'     # static string so I can indicate what ver the script was last tested with
 
 prepWork = PrepWork()
