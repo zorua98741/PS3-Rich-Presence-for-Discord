@@ -193,7 +193,6 @@ class GatherDetails:
             cpu = cpu.group(0)
             rsx = rsx.group(0)
             self.thermalData = f'{cpu} | {rsx}'
-            self.thermalData = self.thermalData.replace('Â', '')    # ! bandaid fix ! ANSI encoding is being used on some users??
             print(f'get_thermals():     {self.thermalData}')
         except AttributeError:
             print(f'get_thermals(): could not find html for thermal data, has webmanMOD been updated since {wmanVer}?')
@@ -328,6 +327,8 @@ while True:
             gatherDetails.get_thermals()
         gatherDetails.decide_game_type()
         # print(f'{gatherDetails.name}, {gatherDetails.thermalData}, {gatherDetails.image}, {gatherDetails.titleID}')   # debugging
+        gatherDetails.name = gatherDetails.name.replace('Â','')                 # ! bandaid fix ! ANSI encoding is being used on some users??
+        gatherDetails.thermalData = gatherDetails.thermalData.replace('Â','')   # ! bandaid fix ! ANSI encoding is being used on some users??
         try:
             prepWork.RPC.update(details=gatherDetails.name, state=gatherDetails.thermalData, large_image=gatherDetails.image, large_text=gatherDetails.titleID, start=timer)
         except(InvalidPipe, InvalidID):
