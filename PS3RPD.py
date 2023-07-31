@@ -325,10 +325,11 @@ while True:
         print('')
         if prepWork.showTemps.lower()[0] == 't':    # first character of variable in lowercase
             gatherDetails.get_thermals()
+            gatherDetails.thermalData = gatherDetails.thermalData.replace('Â','')   # ! bandaid fix ! ANSI encoding is being used on some users??
         gatherDetails.decide_game_type()
         # print(f'{gatherDetails.name}, {gatherDetails.thermalData}, {gatherDetails.image}, {gatherDetails.titleID}')   # debugging
         gatherDetails.name = gatherDetails.name.replace('Â','')                 # ! bandaid fix ! ANSI encoding is being used on some users??
-        gatherDetails.thermalData = gatherDetails.thermalData.replace('Â','')   # ! bandaid fix ! ANSI encoding is being used on some users??
+        
         try:
             prepWork.RPC.update(details=gatherDetails.name, state=gatherDetails.thermalData, large_image=gatherDetails.image, large_text=gatherDetails.titleID, start=timer)
         except(InvalidPipe, InvalidID):
