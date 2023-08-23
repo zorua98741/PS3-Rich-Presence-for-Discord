@@ -50,7 +50,7 @@ Contact me via Discord: "zorua98741"/"zorua98741#0023".
 * A Python 3.9 interpreter installed on the PC if you do not wish to use the executable file
 
 ### Installing as a Windows service (optional)
-Download [NSSM](nssm.cc/release/nssm-2.24.zip) and run `nssm install <service name ie. ps3rpd>` to install PS3RPD as a Windows service.
+Download [NSSM](https://nssm.cc/release/nssm-2.24.zip) and run `nssm install <service name ie. ps3rpd>` to install PS3RPD as a Windows service.
 WARNING: PS3RPD.exe must be in a location that won't change ie. C:\ps3rpd\PS3RPD.exe
 
 ## Additional Information
