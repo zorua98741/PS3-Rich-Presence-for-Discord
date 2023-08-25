@@ -214,6 +214,7 @@ class GatherDetails:
     def get_PS3_details(self):
         titleID = self.soup.find('a', target='_blank')  # get titleID of open game/homebrew
         name = self.soup.find('a', target='_blank').find_next_sibling()  # get name of open game/homebrew
+        name = str(name).replace('\n', '')  # need to remove newline characters as they break regex
         try:
             titleID = re.search('>(.*)<', str(titleID)).group(1)     # remove surrounding HTML
             name = re.search('>(.*)<', str(name)).group(1)
@@ -246,7 +247,7 @@ class GatherDetails:
 
     def get_PS3_image(self):    # can use psimg.db if present, otherwise try gametdb before falling back on Discord dev app
         self.image = self.titleID.lower()  # by default set titleID as image name for Discord developer application (must be lowercase)
-        if os.path.isfile('apsimg.db'):  # test if database is in same directory as script
+        if os.path.isfile('psimg.db'):  # test if database is in same directory as script
             self.image = self.use_local_db()
         else:   # attempt to get image from GameTDB
             self.image = self.use_gametdb()
@@ -289,6 +290,7 @@ class GatherDetails:
                 print('using GameTDB')
                 return url
             else:
+                print(f'use_gametdb(): no image found at {url}, using Discord dev app image')
                 return self.titleID.lower()     # bandaid fix, use Discord dev app
 
     def get_retro_image(self):  # uses 'name' for image names
@@ -325,11 +327,11 @@ while True:
         print('')
         if prepWork.showTemps.lower()[0] == 't':    # first character of variable in lowercase
             gatherDetails.get_thermals()
-            gatherDetails.thermalData = gatherDetails.thermalData.replace('Â','')   # ! bandaid fix ! ANSI encoding is being used on some users??
+            gatherDetails.thermalData = gatherDetails.thermalData.replace('Â','')  # ! bandaid fix ! ANSI encoding is being used on some users??
         gatherDetails.decide_game_type()
         # print(f'{gatherDetails.name}, {gatherDetails.thermalData}, {gatherDetails.image}, {gatherDetails.titleID}')   # debugging
         gatherDetails.name = gatherDetails.name.replace('Â','')                 # ! bandaid fix ! ANSI encoding is being used on some users??
-        
+
         try:
             prepWork.RPC.update(details=gatherDetails.name, state=gatherDetails.thermalData, large_image=gatherDetails.image, large_text=gatherDetails.titleID, start=timer)
         except(InvalidPipe, InvalidID):
@@ -337,3 +339,5 @@ while True:
             prepWork.connect_to_discord()   # start connection loop
         prevTitle = gatherDetails.titleID   # set new value for next loop
         sleep(float(prepWork.waitTime))
+
+
