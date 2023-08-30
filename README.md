@@ -25,8 +25,9 @@ or
 * [version 1.9.3 .py](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.9.3/PS3RPD.py)
 
 ### Note
-The executable file will very likely be flagged as a virus on your computer due to pyinstaller being used to compile it.  
-If you wish to use the optional image database (psimg.db), place it in the same directory as the .py or .exe
+The executable file will very likely be flagged as a virus on your computer due to pyinstaller being used to compile it.
+As far as I know, there is nothing I can do to fix this.
+
 
 ## Contact Me
 Contact me via Discord: "zorua98741"/"zorua98741#0023".
