@@ -21,6 +21,7 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
         self.showTemps = 'True'
         self.indivRetroCovers = 'False'
         self.showTimer = 'True'
+        self.hibernateTime = '600'  # seconds
         self.RPC = None
 
     def read_config(self):
@@ -37,6 +38,7 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
                 self.showTemps = re.search(': (.*)', lines[3]).group(1)
                 self.indivRetroCovers = re.search(': (.*)', lines[4]).group(1)
                 self.showTimer = re.search(': (.*)', lines[5]).group(1)
+                self.hibernateTime = re.search(': (.*)', lines[6]).group(1)
             except Exception as e:
                 exit(f'error with config file "{e}". \nTry deleting it or contact the developer.')
             print(f'Trying {self.ip}...')
@@ -137,6 +139,7 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
         file.write(f'show temperature: {self.showTemps}\n')
         file.write(f'use individual art for retro games: {self.indivRetroCovers}\n')
         file.write(f'show time elapsed: {self.showTimer}\n')
+        file.write(f'hibernate time: {self.hibernateTime}\n')
 
     def connect_to_discord(self):
         while True:
@@ -157,6 +160,7 @@ class GatherDetails:
         self.name = None
         self.titleID = None
         self.image = None
+        self.isRetroGame = False
 
     def ping_PS3(self):     # Will work if webman is unloaded for some reason, will hopefully greatly reduce risk of
         # PS3 crashing when webman is contacted while also loading or quitting out of a game. (! Needs further testing !)
@@ -199,17 +203,19 @@ class GatherDetails:
 
     def decide_game_type(self):
         # PS3 games will only be detected when they are OPEN, however PS2 and PS1 games will be detected when they are MOUNTED
+        self.isRetroGame = False  # reset boolean each test
         if self.soup.find('a', target='_blank') is not None:    # PS3ISO, JB Folder Format, and PS3 PKG games will display this field in wman
             print('decide_game_type():  PS3 Game or Homebrew')
             self.get_PS3_details()
         elif self.soup.find('a', href=re.compile('/(dev_hdd0|dev_usb00[0-9])/(PSXISO|PS2ISO)')) is not None:  # search for PSX or PS2 mounted game
+            self.isRetroGame = True
             print('decide_game_type():  Retro')
             self.get_retro_details()
         else:
             print('decide_game_type():  XMB')
             self.name = 'XMB'
             self.image = 'xmb'
-            self.titleID = None     # even though not used needs to be reset so prev titleID is not shown on XMB
+            self.titleID = None     # even though not used needs to be reset so prev titleID is not shown when on XMB
 
     def get_PS3_details(self):
         titleID = self.soup.find('a', target='_blank')  # get titleID of open game/homebrew
@@ -309,6 +315,7 @@ wmanVer = '1.47.45'     # static string so I can indicate what ver the script wa
 
 prepWork = PrepWork()
 prepWork.connect_to_discord()   # running NetworkScan before PyPresence breaks asyncIO, I am not motivated enough to find proper fix.
+closed = False  # boolean for RPC pipe
 prepWork.read_config()  # runs through majority of functions in PrepWork class
 gatherDetails = GatherDetails()
 timer = None    # default value for if config set to false
@@ -321,10 +328,21 @@ if prepWork.ip is None:     # very basic error notification for if PrepWork brea
 
 while True:
     if not gatherDetails.get_html():    # triggered if webman goes down
-        print(f'PS3 not found on network, waiting {prepWork.waitTime} seconds.')
-        sleep(float(prepWork.waitTime))
+        if gatherDetails.isRetroGame is True:   # should only occur if PS2 game is mounted
+            print(f'PS2 game previously mounted, keeping RPC active and waiting {prepWork.waitTime} seconds')
+            sleep(float(prepWork.waitTime))
+        else:
+            print(f'PS3 not found on network, closing RPC and hibernating {prepWork.hibernateTime} seconds.')
+            if not closed:
+                prepWork.RPC.clear()
+            prepWork.RPC.close()    # destroy pipe
+            closed = True
+            sleep(float(prepWork.hibernateTime))
     else:   # continue with normal program loop
         print('')
+        if closed:  # decide if RPC needs to be reconnected
+            prepWork.connect_to_discord()
+            closed = False
         if prepWork.showTemps.lower()[0] == 't':    # first character of variable in lowercase
             gatherDetails.get_thermals()
             gatherDetails.thermalData = gatherDetails.thermalData.replace('Â','')  # ! bandaid fix ! ANSI encoding is being used on some users??
@@ -339,5 +357,3 @@ while True:
             prepWork.connect_to_discord()   # start connection loop
         prevTitle = gatherDetails.titleID   # set new value for next loop
         sleep(float(prepWork.waitTime))
-
-
