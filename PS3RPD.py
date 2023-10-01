@@ -342,6 +342,7 @@ while True:
         print('')
         if closed:  # decide if RPC needs to be reconnected
             prepWork.connect_to_discord()
+            timer = time()
             closed = False
         if prepWork.showTemps.lower()[0] == 't':    # first character of variable in lowercase
             gatherDetails.get_thermals()
