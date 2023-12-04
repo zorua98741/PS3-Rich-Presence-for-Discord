@@ -22,6 +22,7 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
         self.indivRetroCovers = 'False'
         self.showTimer = 'True'
         self.hibernateTime = '600'  # seconds
+        self.disableIpPrompt = 'False'
         self.RPC = None
 
     def read_config(self):
@@ -39,12 +40,14 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
                 self.indivRetroCovers = re.search(': (.*)', lines[4]).group(1)
                 self.showTimer = re.search(': (.*)', lines[5]).group(1)
                 self.hibernateTime = re.search(': (.*)', lines[6]).group(1)
+                self.disableIpPrompt = re.search(': (.*)', lines[7]).group(1)
             except Exception as e:
-                exit(f'error with config file "{e}". \nTry deleting it or contact the developer.')
-            print(f'Trying {self.ip}...')
+                exit(f'error with config file "{e}". \nIf you downloaded a new version of PS3RPD try deleting the config file. If that fails contact the developer.')
+            print(f'Trying "{self.ip}" for webmanMOD')
             if not self.test_for_webman(self.ip):    # IP in config still belongs to PS3
-                print('IP in config file is not detected as belonging to a PS3, please check if it has changed and that webman is loaded.')
-                self.prompt_user()
+                if self.disableIpPrompt[0].lower() == 'f':  # for people running the script at boot with a static IP address.
+                    print('IP in config file is not detected as belonging to a PS3, please check if it has changed and that webman is loaded.')
+                    self.prompt_user()
         else:   # file does not exist
             print('no config found!')
             self.prompt_user()
@@ -140,6 +143,7 @@ class PrepWork:     # Python2 class should be "class PrepWork(object):" ?
         file.write(f'use individual art for retro games: {self.indivRetroCovers}\n')
         file.write(f'show time elapsed: {self.showTimer}\n')
         file.write(f'hibernate time: {self.hibernateTime}\n')
+        file.write(f'disable IP prompt: {self.disableIpPrompt}\n')
 
     def connect_to_discord(self):
         while True:
