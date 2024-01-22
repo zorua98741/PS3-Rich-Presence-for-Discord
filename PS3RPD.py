@@ -49,7 +49,7 @@ class PrepWork:  # Python2 class should be "class PrepWork(object):" ?
             with self.config_path.open(mode="r") as f:
                 self.config = json.load(f)
             self.config["wait_seconds"] = max(15, self.config["wait_seconds"])
-            if not self.test_for_webman() and self.config["ip_prompt"]:
+            if not self.test_for_webman(self.config["ip"]) and self.config["ip_prompt"]:
                 print("PS3 cannot be reached via the IP saved in the config file.")
                 self.prompt_user()
         else:
