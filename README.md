@@ -48,6 +48,7 @@ Contact me via Discord: "zorua98741"/"zorua98741#0023".
 * PS3 with [webmanMOD](https://github.com/aldostools/webMAN-MOD/releases) installed 
 * PS3 and PC on the same network/internet connection
 * Discord installed and open on the PC running the script
+* Administrator permissions on the PC
 * A Python 3.9 interpreter installed on the PC if you do not wish to use the executable file
 
 ### Installing as a Windows service (optional)
