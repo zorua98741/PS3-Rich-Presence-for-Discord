@@ -68,11 +68,10 @@ PS3RPD makes use of an external config file to persistently store a few variable
 
 
 ### Using your own images
-If you would like to have complete control over what images are used per game, you must create your own Discord developer application over at https://discord.com/developers/applications.
+If you'd like to control what images are used for each game, you must create a Discord Developer Application over at the [Discord Developer Portal](https://discord.com/developers/applications).
 
-Once created, copy the "APPLICATION ID" from the developer portal and paste it into the external config file "PS3RPDconfig.txt", replacing the value of "ID".
+Once created, copy the application ID from the Developer Portal and paste it into the external `config.json`, replacing the value of `client_id`.
 
-You will now be able to add your own art assets in the developer portal under "Rich Presence > Art Assets". Note that the name of the art assets uploaded must be the same as whatever is output from the script when that specific game is open.  
-It will be a lowercase titleID, e.g. abcd12345
+You are now able to upload your own assets in the Developer Portal under `Rich Presence > Art Assets`. Note that the name of the asset uploaded must be the lowercase title ID provided in the script's output. (e.g. `abcd12345`)
 
 ## [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/N4N87V7K5) [![pypresence](https://img.shields.io/badge/using-pypresence-00bb88.svg?style=for-the-badge&logo=discord&logoWidth=20)](https://github.com/qwertyquerty/pypresence)
