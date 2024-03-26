@@ -38,7 +38,7 @@ default_config = {
 
 
 class PrepWork:  # Python2 class should be "class PrepWork(object):" ?
-    config_path = Path("config.json")
+    config_path = Path("config.txt")
 
     def __init__(self):
         self.RPC = None
@@ -417,7 +417,7 @@ while True:
             sleep(prepWork.config["wait_seconds"])
         else:
             print(
-                f"PS3 not found on network, closing RPC and hibernating {prepWork.confi['hibernate_seconds']} seconds."
+                f"PS3 not found on network, closing RPC and hibernating {prepWork.config['hibernate_seconds']} seconds."
             )
             if not closed:
                 prepWork.RPC.clear()
