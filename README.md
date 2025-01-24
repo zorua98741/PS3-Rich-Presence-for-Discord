@@ -3,6 +3,7 @@ Discord Rich Presence script for PS3 consoles on HFW&HEN or CFW.
 
 Display what game you are playing on PS3 via your PC!
 
+## Discord has broken or changed how images are handled in Rich Presence, I am aware of the issue and looking to see how this can be fixed
 ## Display Example
 <table>
 	<tr>
