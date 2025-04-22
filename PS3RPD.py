@@ -34,6 +34,7 @@ default_config = {
     "hibernate_seconds": 600,
     "ip_prompt": True,
     "show_timer": True,
+    "prefer_dev_app": False
 }
 
 
@@ -308,14 +309,15 @@ class GatherDetails:
 
     def get_PS3_image(
         self,
-    ):  # can use psimg.db if present, otherwise try gametdb before falling back on Discord dev app
+    ):  # allow user to prefer using only discord dev app, otherwise try external psimg.db file, followed by try gametdb
         self.image = self.titleID.lower()  # by default set titleID as image name for Discord developer application (must be lowercase)
-        if os.path.isfile(
-            "psimg.db"
-        ):  # test if database is in same directory as script
-            self.image = self.use_local_db()
-        else:  # attempt to get image from GameTDB
-            self.image = self.use_gametdb()
+        if prepWork.config["prefer_dev_app"] is False:
+            if os.path.isfile(
+                "psimg.db"
+            ):  # test if database is in same directory as script
+                self.image = self.use_local_db()
+            else:  # attempt to get image from GameTDB
+                self.image = self.use_gametdb()
         print(f"get_PS3_image():    {self.image}")
 
     def use_local_db(
