@@ -14,6 +14,9 @@ def ask_install_uv():
     if choice == "y":
         if shutil.which("curl") is None:
             print("`curl` not found, cannot run command")
+            # NOTE: Assumes that users are using a Debian based distribution.
+            # If they are not and try to run this command, it will fail.
+            # To improve UX, the script could check and print a command based on distro.
             print(
                 "Please install curl with `sudo apt-get install curl -y` before running again"
             )
@@ -22,7 +25,8 @@ def ask_install_uv():
             subprocess.check_call(
                 ["sh", "-c", "curl -LsSf https://astral.sh/uv/install.sh | sh"]
             )
-            print("uv installed successfully. Please restart the script.")
+            print("uv installed successfully.")
+            print("Please reload your shell (`exec $SHELL`) and run the script again.")
             sys.exit(0)
         except Exception as e:
             print(f"Installation failed: {e}")
