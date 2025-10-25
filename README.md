@@ -59,7 +59,8 @@ Alternatively, you can run the command via the terminal by running `cd ~/ps3-ric
 #### Installing as a systemd service (optional)
 <details>
   <summary>If you would like the script to start on device boot, after the first run, run the following commands in your terminal:</summary>
-
+<br>
+	
 ```bash
 # Creates the user service folder if it doesn't exist yet, and the user systemd env folder
 mkdir -p ~/.config/systemd/user ~/.config/environment.d/
@@ -96,7 +97,7 @@ echo "Finished adding user service for ps3rpd."
 echo "You can check the status of the service with `systemctl --user status ps3rpd`"
 ```
 
-In order to check the health of the service, you can run `systemctl --user status ps3rpd`
+In order to check the health of the service, you can run `systemctl --user status ps3rpd`<br>
 For more depth logs you can use `journalctl --user -xeu ps3rpd`
 </details>
 
