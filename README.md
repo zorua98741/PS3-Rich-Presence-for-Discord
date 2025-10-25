@@ -53,7 +53,7 @@ git clone https://github.com/zorua98741/PS3-Rich-Presence-for-Discord ~/ps3-rich
 cd ~/ps3-rich-presence && ./start.py
 ```
 
-From there you can run the script via double clicking on the file within your file explorer, and clicking on "Run (in terminal)".
+From there you can run the script via double clicking on the file within your file explorer, and clicking on "Run (in terminal)".<br>
 Alternatively, you can run the command via the terminal by running `cd ~/ps3-rich-presence && ./start.py` again.
 
 #### Installing as a systemd service (optional)
