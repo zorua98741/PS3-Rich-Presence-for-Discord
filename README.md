@@ -44,12 +44,61 @@ WARNING: PS3RPD.exe must be in a location that won't change ie. C:\ps3rpd\PS3RPD
 > As far as I know, there is nothing I can do to fix this.
 
 ### Linux 
+
+To download and run the script for the first time:
 ```bash
 # Clone the GitHub repository under the user folder
 git clone https://github.com/zorua98741/PS3-Rich-Presence-for-Discord ~/ps3-rich-presence
-# Change the working directory to to the newly created Git repo and run the script
+# Run the start script
 cd ~/ps3-rich-presence && ./start.py
 ```
+
+From there you can run the script via double clicking on the file within your file explorer, and clicking on "Run (in terminal)".
+Alternatively, you can run the command via the terminal by running `cd ~/ps3-rich-presence && ./start.py` again.
+
+#### Installing as a systemd service (optional)
+<details>
+  <summary>If you would like the script to start on device boot, after the first run, run the following commands in your terminal:</summary>
+
+```bash
+# Creates the user service folder if it doesn't exist yet, and the user systemd env folder
+mkdir -p ~/.config/systemd/user ~/.config/environment.d/
+# Include local binaries in your systemd user environment
+# (we need this so systemd can find the 'uv' executable)
+bash -c 'echo "
+# Adds ~/.local/bin to PATH so systemd services can find user-installed binaries
+PATH=${HOME}/.local/bin:
+" >> ~/.config/environment.d/90-path.conf'
+
+# Creates a systemd .service file in the user service folder that runs the script
+bash -c 'echo "
+[Unit]
+Description=Enables Discord Rich Presence for PS3
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/usr/bin/python3 $HOME/ps3-rich-presence/start.py
+Restart=on-failure
+StandardOutput=journal
+StandardError=journal
+WorkingDirectory=$HOME/ps3-rich-presence
+
+[Install]
+WantedBy=default.target
+" > ~/.config/systemd/user/ps3rpd.service'
+# Reloads the systemd service to recognize the new service
+systemctl --user daemon-reload
+# Enables the service and starts it
+systemctl --user enable --now ps3rpd
+# Make it clear that something happened
+echo "Finished adding user service for ps3rpd."
+echo "You can check the status of the service with `systemctl --user status ps3rpd`"
+```
+
+In order to check the health of the service, you can run `systemctl --user status ps3rpd`
+For more depth logs you can use `journalctl --user -xeu ps3rpd`
+</details>
 
 ## Limitations
 * __A PC must be used to display presence, there is no way to install and use this script solely on the PS3__
