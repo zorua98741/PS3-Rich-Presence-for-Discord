@@ -1,27 +1,36 @@
-import json
+# /// script
+# requires-python = ">=3.9"
+# dependencies = [
+#     "bs4",
+#     "networkscan",
+#     "pypresence",
+#     "requests",
+# ]
+# ///
 from pathlib import Path
 from socket import socket, AF_INET, SOCK_DGRAM  # used to get host IP address
+import json  # used for configuration
 import re  # used for regular expressions
-import networkscan  # used for automatic obtaining IP address, requires pip install
 import os  # used to test if config exists
-import requests  # used to test if given IP belongs to PS3, requires pip install
-from requests.exceptions import (
-    ConnectionError,
-)  # used to handle thrown errors on connecting to webpage
-from bs4 import BeautifulSoup  # used for webpage scraping, requires pip install
 from time import (
     sleep,
 )  # used to add delay to mitigate rate limiting and webmanMOD memory consumption
-import subprocess  # used to send ICMP  ping packets to PS3
+import subprocess  # used to send ICMP ping packets to PS3
 import platform  # used to get operating system of PC
 import sqlite3  # used for getting image from database
+import networkscan  # used for automatic obtaining IP address
+from time import time
+from bs4 import BeautifulSoup  # used for webpage scraping
+import requests  # used to test if given IP belongs to PS3
+from requests.exceptions import (
+    ConnectionError,
+)  # used to handle thrown errors on connecting to webpage
 from pypresence import (
     Presence,
     InvalidPipe,
     InvalidID,
     DiscordNotFound,
-)  # used for sending details to Discord, requires pip install
-from time import time
+)  # used for sending details to Discord
 
 
 default_config = {
@@ -34,7 +43,7 @@ default_config = {
     "hibernate_seconds": 600,
     "ip_prompt": True,
     "show_timer": True,
-    "prefer_dev_app": False
+    "prefer_dev_app": False,
 }
 
 
