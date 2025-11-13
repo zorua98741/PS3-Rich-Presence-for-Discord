@@ -31,7 +31,7 @@ Display what game you are playing on PS3 via your PC!
 * A Python 3.9 interpreter installed on the PC if you do not wish to use the executable file
 
 ### Windows
-* ~~[version 1.9.7 .exe](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.9.7/PS3RPD.exe)~~
+* [version 1.9.7 .exe](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.9.7/PS3RPD.exe)
 or
 * [version 1.9.7 .py](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.9.7/PS3RPD.py)
 
