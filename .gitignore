@@ -2,3 +2,7 @@ config.json
 ps3rpdconfig.json
 config.txt
 ps3rpdconfig.txt
+build/
+.idea
+PS3RPD.spec
+icon.ico
