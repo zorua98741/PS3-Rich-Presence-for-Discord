@@ -8,14 +8,17 @@ Display what game you are playing on PS3 via your PC!
 	<tr>
 		<th>XMB</th>
 		<th> <img src="https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/blob/main/img/xmb.png?raw=true"> </th>
+		<th> <img src="https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/blob/main/img/xmb2025.png?raw=true"></th>
 	</tr>
 	<tr>
 		<th>PS3</th>
 		<th> <img src="https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/blob/main/img/ps3.png?raw=true"> </th>
+		<th> <img src="https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/blob/main/img/ps32025.png?raw=true"></th>
 	</tr>
 	<tr>
 		<th>Retro</th>
 		<th> <img src="https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/blob/main/img/retro.png?raw=true"> </th>
+		<th> <img src="https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/blob/main/img/retro2025.png?raw=true"></th>
 	</tr>
 </table>
 
