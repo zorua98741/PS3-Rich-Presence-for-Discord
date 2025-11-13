@@ -44,11 +44,12 @@ default_config = {
     "ip_prompt": True,
     "show_timer": True,
     "prefer_dev_app": False,
+    "use_appname": False,
 }
 
 
 class PrepWork:  # Python2 class should be "class PrepWork(object):" ?
-    config_path = Path("config.txt")
+    config_path = Path("ps3rpdconfig.txt")
 
     def __init__(self):
         self.RPC = None
@@ -452,16 +453,29 @@ while True:
             "Â", ""
         )  # ! bandaid fix ! ANSI encoding is being used on some users??
 
-        try:
-            prepWork.RPC.update(
-                details=gatherDetails.name,
-                state=gatherDetails.thermalData,
-                large_image=gatherDetails.image,
-                large_text=gatherDetails.titleID,
-                start=timer,
-            )
-        except (InvalidPipe, InvalidID):
-            prepWork.RPC.close()  # close Presence if Discord is not found     ! Does this actually do anything? !
-            prepWork.connect_to_discord()  # start connection loop
+        if prepWork.config["use_appname"]:  # accommodate API now allowing for us to set name
+            try:
+                prepWork.RPC.update(
+                    details=gatherDetails.name,
+                    state=gatherDetails.thermalData,
+                    large_image=gatherDetails.image,
+                    large_text=gatherDetails.titleID,
+                    start=timer,
+                )
+            except (InvalidPipe, InvalidID):
+                prepWork.RPC.close()  # close Presence if Discord is not found     ! Does this actually do anything? !
+                prepWork.connect_to_discord()  # start connection loop
+        else:
+            try:
+                prepWork.RPC.update(
+                    name=gatherDetails.name,
+                    details=gatherDetails.thermalData,
+                    large_image=gatherDetails.image,
+                    large_text=gatherDetails.titleID,
+                    start=timer,
+                )
+            except (InvalidPipe, InvalidID):
+                prepWork.RPC.close()  # close Presence if Discord is not found     ! Does this actually do anything? !
+                prepWork.connect_to_discord()  # start connection loop
         prevTitle = gatherDetails.titleID  # set new value for next loop
         sleep(prepWork.config["wait_seconds"])
