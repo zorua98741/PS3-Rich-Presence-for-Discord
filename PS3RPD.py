@@ -287,7 +287,7 @@ class GatherDetails:
     def get_retro_details(
         self,
     ):  # only tested with PSX and PS2 games, PSP and retroarch game compatibility unknown
-        name = "Retro"  # if a PSX or PS2 game is not detected, or extern variable is False, this default will be used
+        name = "PlayStation 1/2"  # if a PSX or PS2 game is not detected, or extern variable is False, this default will be used
         if prepWork.config["retro_covers"]:
             # name detected is based on name of file
             if (
