@@ -31,9 +31,9 @@ Display what game you are playing on PS3 via your PC!
 * A Python 3.9 interpreter installed on the PC if you do not wish to use the executable file
 
 ### Windows
-* [version 1.9.5 .exe](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.9.5/PS3RPD.exe)
+* ~~[version 1.9.7 .exe](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.9.7/PS3RPD.exe)~~
 or
-* [version 1.9.5 .py](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.9.5/PS3RPD.py)
+* [version 1.9.7 .py](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.9.7/PS3RPD.py)
 
 #### Installing as a Windows service (optional)
 Download [NSSM](https://nssm.cc/release/nssm-2.24.zip) and run `nssm install <service name ie. ps3rpd>` to install PS3RPD as a Windows service.
@@ -127,7 +127,7 @@ PS3RPD makes use of an external config file to persistently store a few variable
 ### Using your own images
 If you'd like to control what images are used for each game, you must create a Discord Developer Application over at the [Discord Developer Portal](https://discord.com/developers/applications).
 
-Once created, copy the application ID from the Developer Portal and paste it into the external `config.json`, replacing the value of `client_id`.
+Once created, copy the application ID from the Developer Portal and paste it into the external `ps3rpdconfig.json`, replacing the value of `client_id`.
 
 You are now able to upload your own assets in the Developer Portal under `Rich Presence > Art Assets`. Note that the name of the asset uploaded must be the lowercase title ID provided in the script's output. (e.g. `abcd12345`)
 
