@@ -123,6 +123,9 @@ Contact me via Discord: `zorua98741`/`zorua98741#0023`.
 
 ## Additional Information
 
+### GameTDB
+This script can utilise images provided by [GameTDB](https://www.gametdb.com/), if you are able, consider supporting the service.
+
 ### External config file
 PS3RPD makes use of an external config file to persistently store a few variables, on creation, the default values will be:
 * Your PS3's IP address 	(where the script will find your PS3 on the network)
