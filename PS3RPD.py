@@ -373,7 +373,7 @@ class GatherDetails:
             return self.titleID.lower()  # bandaid fix, use Discord dev app
         else:
             url = f"https://art.gametdb.com/ps3/cover/{val}/{self.titleID}.jpg"  # build URL
-            status = requests.get(url)
+            status = requests.get(url, headers={"User-Agent": "PS3RPD/1.9.7"})  # set headers at request of gametdb contributor
             if status.status_code == 200:  # test if page exists
                 print("using GameTDB")
                 return url
